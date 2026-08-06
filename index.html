@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2048 — Legal &amp; Support</title>
+<meta name="description" content="Privacy policy, terms, imprint and support for the iOS game 2048 by Viktor Rotgang.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23BBADA0'/><rect x='4' y='4' width='11' height='11' rx='3' fill='%23F59563'/><rect x='17' y='4' width='11' height='11' rx='3' fill='%23F65E3B'/><rect x='4' y='17' width='11' height='11' rx='3' fill='%23EDCC61'/><rect x='17' y='17' width='11' height='11' rx='3' fill='%23EDC22E'/></svg>">
+</head>
+<body>
+<style>
+  /* ------------------------------------------------------------------
+     Farben und Maße kommen unverändert aus dem Spiel: die Kachelpalette
+     von play2048.co, der Brett-Ton #BBADA0, das Creme #FAF8EF. Nichts
+     davon ist hier neu erfunden — die Seite soll wie die App aussehen,
+     nicht wie eine Seite über die App.
+     ------------------------------------------------------------------ */
+  :root {
+    --ground:      #FAF8EF;
+    --raised:      #EFEADC;
+    --sunk:        #F3EFE2;
+    --ink:         #3C3A32;
+    --ink-soft:    #8A8073;
+    --line:        #DDD5C6;
+
+    /* Die Kacheln. Reihenfolge = Wert, wie im Spiel. */
+    --t8:    #F2B179;
+    --t16:   #F59563;
+    --t32:   #F67C5F;
+    --t64:   #F65E3B;
+    --t256:  #EDCC61;
+    --t2048: #EDC22E;
+
+    --accent:      var(--t64);
+    --accent-ink:  #FFFFFF;
+    --accent-lip:  #C9482C;
+
+    --rounded: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN",
+               system-ui, -apple-system, sans-serif;
+    --text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    --measure: 68ch;
+  }
+
+  /* Die dunkle Fassung stammt aus der Neon-Welt des Spiels: fast
+     schwarzer Grund, die Wertfarben bleiben unangetastet. */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground:   #14131A;
+      --raised:   #1E1C25;
+      --sunk:     #1A1922;
+      --ink:      #F4F1E6;
+      --ink-soft: #9B93A6;
+      --line:     #322E3C;
+      --accent-lip: #A93A22;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:   #14131A;
+    --raised:   #1E1C25;
+    --sunk:     #1A1922;
+    --ink:      #F4F1E6;
+    --ink-soft: #9B93A6;
+    --line:     #322E3C;
+    --accent-lip: #A93A22;
+  }
+  :root[data-theme="light"] {
+    --ground:   #FAF8EF;
+    --raised:   #EFEADC;
+    --sunk:     #F3EFE2;
+    --ink:      #3C3A32;
+    --ink-soft: #8A8073;
+    --line:     #DDD5C6;
+    --accent-lip: #C9482C;
+  }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--text);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: clamp(28px, 6vw, 64px) clamp(20px, 5vw, 32px) 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  a { color: inherit; }
+
+  /* ---------------- Kopf: das Logo als vier Kacheln ---------------- */
+
+  .masthead { display: flex; flex-direction: column; gap: 22px; }
+  .logo { display: flex; gap: 9px; }
+
+  .logo b {
+    width: clamp(56px, 14vw, 74px);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 22%;
+    font-family: var(--rounded);
+    font-weight: 900;
+    font-size: clamp(30px, 8vw, 42px);
+    color: #fff;
+    box-shadow: 0 6px 14px rgb(0 0 0 / 0.18);
+    animation: drop 0.55s cubic-bezier(0.2, 1.3, 0.4, 1) backwards;
+  }
+  .logo b:nth-child(1) { background: var(--t16);   transform: rotate(-5deg); animation-delay: 0s; }
+  .logo b:nth-child(2) { background: var(--t64);   transform: rotate(3deg);  animation-delay: 0.07s; }
+  .logo b:nth-child(3) { background: var(--t256);  transform: rotate(-2deg); animation-delay: 0.14s; }
+  .logo b:nth-child(4) { background: var(--t2048); transform: rotate(6deg);  animation-delay: 0.21s; }
+
+  @keyframes drop { from { opacity: 0; scale: 0.35; } to { opacity: 1; scale: 1; } }
+
+  .masthead p {
+    margin: 0;
+    max-width: var(--measure);
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+  }
+
+  /* ---------------- Reiter, gebaut wie die Knöpfe der App ---------------- */
+
+  nav { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  nav a {
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--raised);
+    border-radius: 14px;
+    padding: 11px 18px;
+    /* Die Druckkante aus dem Spiel: eine dunklere Leiste darunter, auf
+       die die Fläche beim Drücken herabsinkt. */
+    box-shadow: 0 4px 0 var(--line);
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+  }
+  nav a:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--line); }
+  nav a:active { transform: translateY(4px); box-shadow: 0 0 0 var(--line); }
+  nav a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  nav a.is-primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: 0 4px 0 var(--accent-lip);
+  }
+  nav a.is-primary:hover { box-shadow: 0 5px 0 var(--accent-lip); }
+  nav a.is-primary:active { box-shadow: 0 0 0 var(--accent-lip); }
+
+  /* ---------------- Abschnitte ---------------- */
+
+  section { scroll-margin-top: 24px; }
+
+  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+
+  /* Jeder Abschnitt bekommt eine Kachel mit seinem Anfangsbuchstaben.
+     Die Farben steigen durch die Palette, wie beim Spielen. */
+  .head i {
+    width: 44px; height: 44px; flex: none;
+    display: grid; place-items: center;
+    border-radius: 22%;
+    font-family: var(--rounded);
+    font-weight: 900; font-style: normal; font-size: 1.25rem;
+    color: #fff;
+  }
+  #app-privacy   .head i { background: var(--t8); }
+  #privacy-statement .head i { background: var(--t16); }
+  #terms         .head i { background: var(--t32); }
+  #imprint       .head i { background: var(--t256); }
+  #support       .head i { background: var(--t2048); }
+
+  h2 {
+    font-family: var(--rounded);
+    font-weight: 900;
+    font-size: clamp(1.5rem, 4vw, 1.9rem);
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .lede { max-width: var(--measure); margin: 0 0 24px; color: var(--ink-soft); }
+
+  .blocks { display: flex; flex-direction: column; gap: 16px; }
+
+  /* Ein Inhaltsblock. Die gestrichelten Platzhalter von vorher sind weg —
+     hier steht jetzt echter Text, und der soll nicht aussehen wie eine
+     offene Baustelle. */
+  .block {
+    background: var(--raised);
+    border-radius: 18px;
+    padding: 20px 22px;
+  }
+  .block h3 {
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+  }
+  .block p { margin: 0 0 10px; max-width: var(--measure); }
+  .block p:last-child { margin-bottom: 0; }
+
+  /* ---------------- Impressum ---------------- */
+
+  .fields { display: grid; gap: 12px; }
+  @media (min-width: 620px) { .fields { grid-template-columns: 1fr 1fr; } }
+
+  .field { background: var(--raised); border-radius: 14px; padding: 14px 16px; }
+  .field b {
+    display: block;
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .field span { font-variant-numeric: tabular-nums; }
+
+  /* ---------------- Sprachumschalter ----------------
+
+     Der Rechtstext liegt in zwei Fassungen vor. Englisch steht vorn, weil
+     die App und der Rest der Seite englisch sind — verbindlich bleibt aber
+     die deutsche, und die darf deshalb nicht verschwinden.
+     ------------------------------------------------------------------ */
+
+  .langbar { display: flex; gap: 8px; margin-bottom: 16px; }
+
+  .langbar button {
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.82rem;
+    color: var(--ink);
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 16px;
+    cursor: pointer;
+  }
+  .langbar button[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .langbar button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------------- Die förmliche Datenschutzerklärung ----------------
+
+     Sie bekommt eine eigene, ruhigere Fläche: kleinere Schrift, engere
+     Zeilen, weniger Farbe. Der lockere englische Teil oben und dieses
+     Dokument sollen sich nicht gegenseitig imitieren.
+     ------------------------------------------------------------------ */
+
+  .doc {
+    background: var(--sunk);
+    border: 2px solid var(--line);
+    border-radius: 20px;
+    padding: clamp(20px, 4vw, 34px);
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+  .doc > :first-child { margin-top: 0; }
+  .doc > :last-child { margin-bottom: 0; }
+
+  .doc h3 {
+    font-family: var(--rounded);
+    font-weight: 900;
+    font-size: 1.12rem;
+    letter-spacing: -0.005em;
+    margin: 34px 0 10px;
+    scroll-margin-top: 20px;
+    text-wrap: balance;
+  }
+  .doc h4 {
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 22px 0 8px;
+  }
+  .doc p { margin: 0 0 12px; max-width: var(--measure); }
+  .doc ul { margin: 0 0 14px; padding-left: 1.25em; max-width: var(--measure); }
+  .doc li { margin-bottom: 7px; }
+  .doc strong { font-weight: 700; }
+
+  .doc .stand {
+    display: inline-block;
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 12px;
+  }
+
+  /* Inhaltsübersicht des Dokuments */
+  .doc .index {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    max-width: none;
+  }
+  .doc .index li { margin: 0; }
+  .doc .index-link {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 0.82rem;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+  .doc .index-link:hover { border-color: var(--accent); }
+  .doc .index-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .doc .seal {
+    margin-top: 30px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+  .doc .seal a { color: var(--ink-soft); }
+
+  /* ---------------- Fuß ---------------- */
+
+  footer {
+    border-top: 2px solid var(--line);
+    padding-top: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    align-items: baseline;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  footer b { font-family: var(--rounded); font-weight: 800; color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo b { animation: none; }
+    nav a { transition: none; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="logo" aria-label="2048">
+      <b>2</b><b>0</b><b>4</b><b>8</b>
+    </div>
+    <p>
+      The official page for the iOS game <b>2048</b> by Viktor Rotgang.
+      Everything Apple and players need to look up lives here: how the app
+      handles data, the terms it ships under, who publishes it, and how to get
+      in touch.
+    </p>
+  </header>
+
+  <nav aria-label="Sections">
+    <a class="is-primary" href="#app-privacy">In the app</a>
+    <a href="#privacy-statement">Privacy statement</a>
+    <a href="#terms">Terms</a>
+    <a href="#imprint">Imprint</a>
+    <a href="#support">Support</a>
+  </nav>
+
+  <section id="app-privacy">
+    <div class="head"><i>P</i><h2>In the app</h2></div>
+    <p class="lede">
+      What the game itself does with your data. The formal, legally binding
+      privacy statement for this website follows in the next section.
+    </p>
+
+    <div class="blocks">
+      <div class="block">
+        <h3>What is stored</h3>
+        <p>
+          The app does not require an account or user registration. There is
+          nothing to sign up for and nothing to sign in to.
+        </p>
+        <p>
+          2048 stores only your best score, current game, unlocked themes and
+          settings locally on your device. No game data is uploaded to RTTG
+          Development or shared with third parties.
+        </p>
+      </div>
+
+      <div class="block">
+        <h3>What is not collected</h3>
+        <p>
+          The current version does not collect your name, email address,
+          location, advertising identifier, analytics, crash reports or any
+          other personal information.
+        </p>
+      </div>
+
+      <div class="block">
+        <h3>Network and third parties</h3>
+        <p>
+          Version 1.0 does not use advertising, analytics or third-party SDKs.
+          If online features or advertising are introduced in a future update,
+          this Privacy Policy will be updated before release.
+        </p>
+      </div>
+
+      <div class="block">
+        <h3>Downloading from the App Store</h3>
+        <p>
+          The app is distributed exclusively through Apple's App Store. When you
+          download, install or update it, Apple processes data such as your
+          Apple Account, device and purchase information as an independent
+          controller under its own privacy policy. This happens entirely on
+          Apple's side and is outside our control.
+        </p>
+        <p>
+          From Apple we receive aggregated sales and download figures. In
+          addition, crash reports and usage statistics reach us — but only from
+          people who have turned on "Share With App Developers" under Settings →
+          Privacy &amp; Security → Analytics &amp; Improvements. Apple aggregates
+          this data using privacy-preserving techniques so that it does not
+          identify anyone personally.
+        </p>
+        <p>
+          One exception: if you publish a rating or a review, we can see the
+          nickname and text you chose and may reply to it publicly. The nickname
+          shields your identity — only Apple knows who is behind it. This all
+          takes place on Apple's platform under Apple's terms, not on ours.
+        </p>
+      </div>
+
+      <div class="block">
+        <h3>Your rights</h3>
+        <p>
+          If you have questions about privacy, contact RTTG Development. Since
+          no personal data is stored on our servers, requests regarding stored
+          personal data are generally not applicable for the current version of
+          the app.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="privacy-statement">
+    <div class="head"><i>D</i><h2>Privacy statement</h2></div>
+    <p class="lede">
+      The formal statement under the GDPR. It covers this website; the section
+      above describes the app itself.
+    </p>
+
+    <div class="langbar" role="group" aria-label="Language of the privacy statement">
+      <button type="button" data-switch="en" aria-pressed="true">English</button>
+      <button type="button" data-switch="de" aria-pressed="false">Deutsch</button>
+    </div>
+
+<div class="doc" data-lang="en" lang="en">
+        <h3 id="en-preamble">Preamble</h3>
+        <p>With the following privacy statement we would like to inform you which types of your personal data (hereinafter also referred to as "data") we process, for which purposes and to what extent. This privacy statement applies to all processing of personal data carried out by us, both in the provision of our services and in particular on our websites, in mobile applications and within external online presences, such as our social media profiles (hereinafter collectively referred to as the "online offering").</p>
+        <p>The terms used are not gender-specific.</p>
+        <p><span class="stand">As of 6 August 2026</span></p>
+
+        <h4>Contents</h4>
+        <ul class="index">
+          <li><a class="index-link" href="#en-preamble">Preamble</a></li>
+          <li><a class="index-link" href="#en-controller">Controller</a></li>
+          <li><a class="index-link" href="#en-overview">Overview of processing operations</a></li>
+          <li><a class="index-link" href="#en-legal-bases">Relevant legal bases</a></li>
+          <li><a class="index-link" href="#en-retention">General information on data retention and erasure</a></li>
+          <li><a class="index-link" href="#en-rights">Rights of data subjects</a></li>
+          <li><a class="index-link" href="#en-hosting">Provision of the online offering and web hosting</a></li>
+          <li><a class="index-link" href="#en-contact">Contact and enquiry management</a></li>
+          <li><a class="index-link" href="#en-changes">Changes and updates</a></li>
+          <li><a class="index-link" href="#en-definitions">Definitions of terms</a></li>
+        </ul>
+
+        <h3 id="en-controller">Controller</h3>
+        <p>Viktor Rotgang<br>Märkische Straße 14<br>44866 Bochum<br>Germany</p>
+        <p>Email address: <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
+
+        <h3 id="en-overview">Overview of processing operations</h3>
+        <p>The following overview summarises the types of data processed and the purposes of their processing, and refers to the data subjects concerned.</p>
+
+        <h4>Types of data processed</h4>
+        <ul>
+          <li>Contact data.</li>
+          <li>Content data.</li>
+          <li>Usage data.</li>
+          <li>Meta, communication and procedural data.</li>
+          <li>Log data.</li>
+        </ul>
+
+        <h4>Categories of data subjects</h4>
+        <ul>
+          <li>Communication partners.</li>
+          <li>Users.</li>
+        </ul>
+
+        <h4>Purposes of processing</h4>
+        <ul>
+          <li>Communication.</li>
+          <li>Security measures.</li>
+          <li>Organisational and administrative procedures.</li>
+          <li>Feedback.</li>
+          <li>Provision of our online offering and user-friendliness.</li>
+          <li>Information technology infrastructure.</li>
+        </ul>
+
+        <h3 id="en-legal-bases">Relevant legal bases</h3>
+        <p><strong>Relevant legal bases under the GDPR: </strong>Below you will find an overview of the legal bases of the GDPR on which we process personal data. Please note that in addition to the provisions of the GDPR, national data protection requirements may apply in your or our country of residence or domicile. Should more specific legal bases be relevant in an individual case, we will inform you of these in the privacy statement.</p>
+        <ul>
+          <li><strong>Consent (Art. 6(1)(1)(a) GDPR)</strong> – The data subject has given consent to the processing of personal data relating to them for one or more specific purposes.</li>
+          <li><strong>Performance of a contract and pre-contractual enquiries (Art. 6(1)(1)(b) GDPR)</strong> – Processing is necessary for the performance of a contract to which the data subject is party, or in order to take steps at the request of the data subject prior to entering into a contract.</li>
+          <li><strong>Legitimate interests (Art. 6(1)(1)(f) GDPR)</strong> – Processing is necessary for the purposes of the legitimate interests pursued by the controller or by a third party, except where such interests are overridden by the interests or fundamental rights and freedoms of the data subject which require protection of personal data.</li>
+        </ul>
+        <p><strong>National data protection provisions in Germany: </strong>In addition to the data protection provisions of the GDPR, national data protection rules apply in Germany. These include in particular the Federal Data Protection Act (Bundesdatenschutzgesetz – BDSG). The BDSG contains, among other things, special provisions on the right of access, the right to erasure, the right to object, the processing of special categories of personal data, processing for other purposes, transmission, and automated decision-making in individual cases including profiling. Furthermore, the data protection laws of the individual federal states may apply.</p>
+
+        <h3 id="en-retention">General information on data retention and erasure</h3>
+        <p>We erase personal data that we process in accordance with statutory provisions as soon as the underlying consent is withdrawn or no further legal basis for the processing exists. This applies in cases where the original purpose of processing no longer applies or the data are no longer required. Exceptions to this rule apply where statutory obligations or particular interests require longer storage or archiving of the data.</p>
+        <p>In particular, data that must be retained for commercial or tax law reasons, or whose storage is necessary for legal prosecution or to protect the rights of other natural or legal persons, must be archived accordingly.</p>
+        <p>Our privacy notices contain additional information on the retention and erasure of data that applies specifically to certain processing operations.</p>
+        <p>Where several statements are made regarding the retention period or erasure deadlines for a given item of data, the longest period always prevails. Data that are no longer retained for the originally intended purpose but on the basis of statutory requirements or other grounds are processed by us exclusively for the reasons that justify their retention.</p>
+        <p>Retention and erasure of data: the following general periods apply to retention and archiving under German law:</p>
+        <ul>
+          <li>10 years – Retention period for books and records, annual financial statements, inventories, management reports, opening balance sheets, and the working instructions and other organisational documents required to understand them (§ 147(1)(1) in conjunction with (3) AO, § 14b(1) UStG, § 257(1)(1) in conjunction with (4) HGB).</li>
+          <li>8 years – Accounting vouchers, such as invoices and expense receipts (§ 147(1)(4) and (4a) in conjunction with (3) sentence 1 AO and § 257(1)(4) in conjunction with (4) HGB).</li>
+          <li>6 years – Other business documents: commercial or business letters received, reproductions of commercial or business letters sent, other documents insofar as they are relevant for taxation, e.g. hourly wage slips, operating accounting sheets, costing documents, price labels, and also payroll accounting documents insofar as they are not already accounting vouchers, and till rolls (§ 147(1)(2), (3), (5) in conjunction with (3) AO, § 257(1)(2) and (3) in conjunction with (4) HGB).</li>
+          <li>3 years – Data required in order to consider potential warranty and compensation claims or similar contractual claims and rights, and to process related enquiries, based on past business experience and customary industry practice, are stored for the duration of the regular statutory limitation period of three years (§§ 195, 199 BGB).</li>
+        </ul>
+        <p>Periods beginning at the end of the year: if a period does not expressly begin on a particular date and lasts at least one year, it starts automatically at the end of the calendar year in which the triggering event occurred. In the case of ongoing contractual relationships in the context of which data are stored, the triggering event is the point at which the termination or other ending of the legal relationship takes effect.</p>
+
+        <h3 id="en-rights">Rights of data subjects</h3>
+        <p>Rights of data subjects under the GDPR: as a data subject you have various rights under the GDPR, which arise in particular from Articles 15 to 21 GDPR:</p>
+        <ul>
+          <li><strong>Right to object: You have the right to object at any time, on grounds relating to your particular situation, to the processing of personal data concerning you which is carried out on the basis of Art. 6(1)(e) or (f) GDPR; this also applies to profiling based on those provisions. Where personal data concerning you are processed for direct marketing purposes, you have the right to object at any time to the processing of personal data concerning you for the purposes of such marketing; this also applies to profiling to the extent that it is related to such direct marketing.</strong></li>
+          <li><strong>Right to withdraw consent:</strong> You have the right to withdraw consent given at any time.</li>
+          <li><strong>Right of access:</strong> You have the right to request confirmation as to whether data concerning you are being processed, and to obtain access to those data as well as further information and a copy of the data in accordance with statutory requirements.</li>
+          <li><strong>Right to rectification:</strong> In accordance with statutory requirements, you have the right to request the completion of data concerning you or the rectification of inaccurate data concerning you.</li>
+          <li><strong>Right to erasure and restriction of processing:</strong> In accordance with statutory requirements, you have the right to request that data concerning you be erased without undue delay, or alternatively, in accordance with statutory requirements, to request restriction of the processing of the data.</li>
+          <li><strong>Right to data portability:</strong> You have the right to receive data concerning you which you have provided to us in a structured, commonly used and machine-readable format in accordance with statutory requirements, or to request its transmission to another controller.</li>
+          <li><strong>Complaint to a supervisory authority:</strong> Without prejudice to any other administrative or judicial remedy, you have the right to lodge a complaint with a supervisory authority, in particular in the Member State of your habitual residence, place of work or the place of the alleged infringement, if you consider that the processing of personal data concerning you infringes the GDPR.</li>
+        </ul>
+
+        <h3 id="en-hosting">Provision of the online offering and web hosting</h3>
+        <p>We process users' data in order to be able to provide them with our online services. For this purpose we process the user's IP address, which is necessary in order to transmit the content and functions of our online services to the user's browser or device.</p>
+        <ul>
+          <li><strong>Types of data processed:</strong> Usage data (e.g. page views and time spent, click paths, intensity and frequency of use, device types and operating systems used, interactions with content and functions); meta, communication and procedural data (e.g. IP addresses, timestamps, identification numbers, parties involved). Log data (e.g. log files concerning logins or the retrieval of data or access times).</li>
+          <li><strong>Data subjects:</strong> Users (e.g. website visitors, users of online services).</li>
+          <li><strong>Purposes of processing and legitimate interests:</strong> Provision of our online offering and user-friendliness; information technology infrastructure (operation and provision of information systems and technical devices such as computers and servers). Security measures.</li>
+          <li><strong>Retention and erasure:</strong> Erasure in accordance with the information in the section "General information on data retention and erasure".</li>
+          <li><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(1)(f) GDPR).</li>
+        </ul>
+        <p><strong>Further information on processing operations, procedures and services:</strong></p>
+        <ul>
+          <li><strong>Provision of the online offering on rented storage space: </strong>For the provision of our online offering we use storage space, computing capacity and software which we rent or otherwise obtain from a corresponding server provider (also referred to as a "web host"); <strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(1)(f) GDPR).</li>
+          <li><strong>Collection of access data and log files: </strong>Access to our online offering is logged in the form of so-called "server log files". Server log files may include the address and name of the web pages and files accessed, the date and time of access, volumes of data transferred, notification of successful retrieval, browser type and version, the user's operating system, referrer URL (the previously visited page) and, as a rule, IP addresses and the requesting provider. Server log files may be used, on the one hand, for security purposes, e.g. to avoid server overload (in particular in the case of abusive attacks, so-called DDoS attacks), and on the other hand to ensure server utilisation and stability; <strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(1)(f) GDPR). <strong>Erasure of data:</strong> Log file information is stored for a maximum of 30 days and then erased or anonymised. Data whose further retention is required for evidentiary purposes are excluded from erasure until the respective incident has been finally clarified.</li>
+        </ul>
+
+        <h3 id="en-contact">Contact and enquiry management</h3>
+        <p>When contacting us (e.g. by post, email, telephone or via social media), and within the framework of existing user and business relationships, the details of the enquiring persons are processed to the extent necessary to respond to the contact enquiries and any requested measures.</p>
+        <ul>
+          <li><strong>Types of data processed:</strong> Contact data (e.g. postal and email addresses or telephone numbers); content data (e.g. textual or pictorial messages and contributions and the information relating to them, such as details of authorship or the time of creation). Meta, communication and procedural data (e.g. IP addresses, timestamps, identification numbers, parties involved).</li>
+          <li><strong>Data subjects:</strong> Communication partners.</li>
+          <li><strong>Purposes of processing and legitimate interests:</strong> Communication; organisational and administrative procedures; feedback. Provision of our online offering and user-friendliness.</li>
+          <li><strong>Retention and erasure:</strong> Erasure in accordance with the information in the section "General information on data retention and erasure".</li>
+          <li><strong>Legal bases:</strong> Legitimate interests (Art. 6(1)(1)(f) GDPR). Performance of a contract and pre-contractual enquiries (Art. 6(1)(1)(b) GDPR).</li>
+        </ul>
+
+        <h3 id="en-changes">Changes and updates</h3>
+        <p>We ask you to inform yourself regularly about the content of our privacy statement. We adapt the privacy statement as soon as changes to the data processing we carry out make this necessary. We will inform you as soon as the changes require an act of cooperation on your part (e.g. consent) or other individual notification.</p>
+        <p>Where we provide addresses and contact information of companies and organisations in this privacy statement, please note that addresses may change over time, and we ask you to check the details before making contact.</p>
+
+        <h3 id="en-definitions">Definitions of terms</h3>
+        <p>This section provides an overview of the terms used in this privacy statement. Where terms are defined by law, their statutory definitions apply. The following explanations are intended primarily to aid understanding.</p>
+        <ul>
+          <li><strong>Content data:</strong> Content data comprise information generated in the course of creating, editing and publishing content of all kinds. This category of data may include texts, images, videos, audio files and other multimedia content published on various platforms and media. Content data are not limited to the actual content but also include metadata that provide information about the content itself, such as tags, descriptions, author information and publication dates.</li>
+          <li><strong>Contact data:</strong> Contact data are essential information that enables communication with persons or organisations. They include, among other things, telephone numbers, postal addresses and email addresses, as well as means of communication such as social media handles and instant messaging identifiers.</li>
+          <li><strong>Meta, communication and procedural data:</strong> Meta, communication and procedural data are categories that contain information about the manner in which data are processed, transmitted and managed. Metadata, also known as data about data, comprise information describing the context, origin and structure of other data. They may include details of file size, creation date, the author of a document and revision histories. Communication data record the exchange of information between users via various channels, such as email traffic, call logs, messages in social networks and chat histories, including the persons involved, timestamps and transmission paths. Procedural data describe the processes and workflows within systems or organisations, including workflow documentation, logs of transactions and activities, and audit logs used to trace and review operations.</li>
+          <li><strong>Usage data:</strong> Usage data refer to information that records how users interact with digital products, services or platforms. These data comprise a broad range of information showing how users use applications, which functions they prefer, how long they spend on particular pages and which paths they take through an application. Usage data may also include the frequency of use, timestamps of activities, IP addresses, device information and location data. They are particularly valuable for analysing user behaviour, optimising user experiences, personalising content and improving products or services. In addition, usage data play a decisive role in identifying trends, preferences and possible problem areas within digital offerings.</li>
+          <li><strong>Personal data:</strong> "Personal data" means any information relating to an identified or identifiable natural person (hereinafter "data subject"); an identifiable natural person is one who can be identified, directly or indirectly, in particular by reference to an identifier such as a name, an identification number, location data, an online identifier (e.g. a cookie) or to one or more factors specific to the physical, physiological, genetic, mental, economic, cultural or social identity of that natural person.</li>
+          <li><strong>Log data:</strong> Log data are information about events or activities that have been logged in a system or network. These data typically contain information such as timestamps, IP addresses, user actions, error messages and other details about the use or operation of a system. Log data are often used to analyse system problems, for security monitoring or to produce performance reports.</li>
+          <li><strong>Controller:</strong> "Controller" means the natural or legal person, public authority, agency or other body which, alone or jointly with others, determines the purposes and means of the processing of personal data.</li>
+          <li><strong>Processing:</strong> "Processing" means any operation or set of operations which is performed on personal data, whether or not by automated means. The term is broad and covers practically any handling of data, be it collection, evaluation, storage, transmission or erasure.</li>
+        </ul>
+
+        <p class="seal">
+          This is a translation provided for convenience. The
+          <a href="#" data-switch="de">German version</a> is the legally binding one.
+          · <a href="https://datenschutz-generator.de/" title="Legal text by Dr. Schwenke — click for more information" target="_blank" rel="noopener noreferrer nofollow">Created with the free privacy policy generator by Dr. Thomas Schwenke</a>
+        </p>
+      </div>
+
+      <div class="doc" data-lang="de" lang="de" hidden>
+      <h3 id="de-m716">Präambel</h3>
+      <p>Mit der folgenden Datenschutzerklärung möchten wir Sie darüber aufklären, welche Arten Ihrer personenbezogenen Daten (nachfolgend auch kurz als "Daten" bezeichnet) wir zu welchen Zwecken und in welchem Umfang verarbeiten. Die Datenschutzerklärung gilt für alle von uns durchgeführten Verarbeitungen personenbezogener Daten, sowohl im Rahmen der Erbringung unserer Leistungen als auch insbesondere auf unseren Webseiten, in mobilen Applikationen sowie innerhalb externer Onlinepräsenzen, wie z. B. unserer Social-Media-Profile (nachfolgend zusammenfassend bezeichnet als "Onlineangebot").</p>
+      <p>Die verwendeten Begriffe sind nicht geschlechtsspezifisch.</p>
+      <p><span class="stand">Stand: 6. August 2026</span></p>
+
+      <h4>Inhaltsübersicht</h4>
+      <ul class="index">
+        <li><a class="index-link" href="#de-m716">Präambel</a></li>
+        <li><a class="index-link" href="#de-m3">Verantwortlicher</a></li>
+        <li><a class="index-link" href="#de-mOverview">Übersicht der Verarbeitungen</a></li>
+        <li><a class="index-link" href="#de-m2427">Maßgebliche Rechtsgrundlagen</a></li>
+        <li><a class="index-link" href="#de-m12">Allgemeine Informationen zur Datenspeicherung und Löschung</a></li>
+        <li><a class="index-link" href="#de-m10">Rechte der betroffenen Personen</a></li>
+        <li><a class="index-link" href="#de-m225">Bereitstellung des Onlineangebots und Webhosting</a></li>
+        <li><a class="index-link" href="#de-m182">Kontakt- und Anfrageverwaltung</a></li>
+        <li><a class="index-link" href="#de-m15">Änderung und Aktualisierung</a></li>
+        <li><a class="index-link" href="#de-m42">Begriffsdefinitionen</a></li>
+      </ul>
+
+      <h3 id="de-m3">Verantwortlicher</h3>
+      <p>Viktor Rotgang<br>Märkische Straße 14<br>44866 Bochum<br>Deutschland</p>
+      <p>E-Mail-Adresse: <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
+
+      <h3 id="de-mOverview">Übersicht der Verarbeitungen</h3>
+      <p>Die nachfolgende Übersicht fasst die Arten der verarbeiteten Daten und die Zwecke ihrer Verarbeitung zusammen und verweist auf die betroffenen Personen.</p>
+
+      <h4>Arten der verarbeiteten Daten</h4>
+      <ul>
+        <li>Kontaktdaten.</li>
+        <li>Inhaltsdaten.</li>
+        <li>Nutzungsdaten.</li>
+        <li>Meta-, Kommunikations- und Verfahrensdaten.</li>
+        <li>Protokolldaten.</li>
+      </ul>
+
+      <h4>Kategorien betroffener Personen</h4>
+      <ul>
+        <li>Kommunikationspartner.</li>
+        <li>Nutzer.</li>
+      </ul>
+
+      <h4>Zwecke der Verarbeitung</h4>
+      <ul>
+        <li>Kommunikation.</li>
+        <li>Sicherheitsmaßnahmen.</li>
+        <li>Organisations- und Verwaltungsverfahren.</li>
+        <li>Feedback.</li>
+        <li>Bereitstellung unseres Onlineangebotes und Nutzerfreundlichkeit.</li>
+        <li>Informationstechnische Infrastruktur.</li>
+      </ul>
+
+      <h3 id="de-m2427">Maßgebliche Rechtsgrundlagen</h3>
+      <p><strong>Maßgebliche Rechtsgrundlagen nach der DSGVO: </strong>Im Folgenden erhalten Sie eine Übersicht der Rechtsgrundlagen der DSGVO, auf deren Basis wir personenbezogene Daten verarbeiten. Bitte nehmen Sie zur Kenntnis, dass neben den Regelungen der DSGVO nationale Datenschutzvorgaben in Ihrem bzw. unserem Wohn- oder Sitzland gelten können. Sollten ferner im Einzelfall speziellere Rechtsgrundlagen maßgeblich sein, teilen wir Ihnen diese in der Datenschutzerklärung mit.</p>
+      <ul>
+        <li><strong>Einwilligung (Art. 6 Abs. 1 S. 1 lit. a) DSGVO)</strong> - Die betroffene Person hat ihre Einwilligung in die Verarbeitung der sie betreffenden personenbezogenen Daten für einen spezifischen Zweck oder mehrere bestimmte Zwecke gegeben.</li>
+        <li><strong>Vertragserfüllung und vorvertragliche Anfragen (Art. 6 Abs. 1 S. 1 lit. b) DSGVO)</strong> - Die Verarbeitung ist für die Erfüllung eines Vertrags, dessen Vertragspartei die betroffene Person ist, oder zur Durchführung vorvertraglicher Maßnahmen erforderlich, die auf Anfrage der betroffenen Person erfolgen.</li>
+        <li><strong>Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f) DSGVO)</strong> - die Verarbeitung ist zur Wahrung der berechtigten Interessen des Verantwortlichen oder eines Dritten notwendig, vorausgesetzt, dass die Interessen, Grundrechte und Grundfreiheiten der betroffenen Person, die den Schutz personenbezogener Daten verlangen, nicht überwiegen.</li>
+      </ul>
+      <p><strong>Nationale Datenschutzregelungen in Deutschland: </strong>Zusätzlich zu den Datenschutzregelungen der DSGVO gelten nationale Regelungen zum Datenschutz in Deutschland. Hierzu gehört insbesondere das Gesetz zum Schutz vor Missbrauch personenbezogener Daten bei der Datenverarbeitung (Bundesdatenschutzgesetz – BDSG). Das BDSG enthält insbesondere Spezialregelungen zum Recht auf Auskunft, zum Recht auf Löschung, zum Widerspruchsrecht, zur Verarbeitung besonderer Kategorien personenbezogener Daten, zur Verarbeitung für andere Zwecke und zur Übermittlung sowie automatisierten Entscheidungsfindung im Einzelfall einschließlich Profiling. Ferner können Landesdatenschutzgesetze der einzelnen Bundesländer zur Anwendung gelangen.</p>
+
+      <h3 id="de-m12">Allgemeine Informationen zur Datenspeicherung und Löschung</h3>
+      <p>Wir löschen personenbezogene Daten, die wir verarbeiten, gemäß den gesetzlichen Bestimmungen, sobald die zugrundeliegenden Einwilligungen widerrufen werden oder keine weiteren rechtlichen Grundlagen für die Verarbeitung bestehen. Dies betrifft Fälle, in denen der ursprüngliche Verarbeitungszweck entfällt oder die Daten nicht mehr benötigt werden. Ausnahmen von dieser Regelung bestehen, wenn gesetzliche Pflichten oder besondere Interessen eine längere Aufbewahrung oder Archivierung der Daten erfordern.</p>
+      <p>Insbesondere müssen Daten, die aus handels- oder steuerrechtlichen Gründen aufbewahrt werden müssen oder deren Speicherung notwendig ist zur Rechtsverfolgung oder zum Schutz der Rechte anderer natürlicher oder juristischer Personen, entsprechend archiviert werden.</p>
+      <p>Unsere Datenschutzhinweise enthalten zusätzliche Informationen zur Aufbewahrung und Löschung von Daten, die speziell für bestimmte Verarbeitungsprozesse gelten.</p>
+      <p>Bei mehreren Angaben zur Aufbewahrungsdauer oder Löschungsfristen eines Datums, ist stets die längste Frist maßgeblich. Daten, die nicht mehr für den ursprünglich vorgesehenen Zweck, sondern aufgrund gesetzlicher Vorgaben oder anderer Gründe aufbewahrt werden, verarbeiten wir ausschließlich zu den Gründen, die ihre Aufbewahrung rechtfertigen.</p>
+      <p>Aufbewahrung und Löschung von Daten: Die folgenden allgemeinen Fristen gelten für die Aufbewahrung und Archivierung nach deutschem Recht:</p>
+      <ul>
+        <li>10 Jahre - Aufbewahrungsfrist für Bücher und Aufzeichnungen, Jahresabschlüsse, Inventare, Lageberichte, Eröffnungsbilanz sowie die zu ihrem Verständnis erforderlichen Arbeitsanweisungen und sonstigen Organisationsunterlagen (§ 147 Abs. 1 Nr. 1 i.V.m. Abs. 3 AO, § 14b Abs. 1 UStG, § 257 Abs. 1 Nr. 1 i.V.m. Abs. 4 HGB).</li>
+        <li>8 Jahre - Buchungsbelege, wie z. B. Rechnungen und Kostenbelege (§ 147 Abs. 1 Nr. 4 und 4a i.V.m. Abs. 3 Satz 1 AO sowie § 257 Abs. 1 Nr. 4 i.V.m. Abs. 4 HGB).</li>
+        <li>6 Jahre - Übrige Geschäftsunterlagen: empfangene Handels- oder Geschäftsbriefe, Wiedergaben der abgesandten Handels- oder Geschäftsbriefe, sonstige Unterlagen, soweit sie für die Besteuerung von Bedeutung sind, z. B. Stundenlohnzettel, Betriebsabrechnungsbögen, Kalkulationsunterlagen, Preisauszeichnungen, aber auch Lohnabrechnungsunterlagen, soweit sie nicht bereits Buchungsbelege sind und Kassenstreifen (§ 147 Abs. 1 Nr. 2, 3, 5 i.V.m. Abs. 3 AO, § 257 Abs. 1 Nr. 2 u. 3 i.V.m. Abs. 4 HGB).</li>
+        <li>3 Jahre - Daten, die erforderlich sind, um potenzielle Gewährleistungs- und Schadensersatzansprüche oder ähnliche vertragliche Ansprüche und Rechte zu berücksichtigen sowie damit verbundene Anfragen zu bearbeiten, basierend auf früheren Geschäftserfahrungen und üblichen Branchenpraktiken, werden für die Dauer der regulären gesetzlichen Verjährungsfrist von drei Jahren gespeichert (§§ 195, 199 BGB).</li>
+      </ul>
+      <p>Fristbeginn mit Ablauf des Jahres: Beginnt eine Frist nicht ausdrücklich zu einem bestimmten Datum und beträgt sie mindestens ein Jahr, so startet sie automatisch am Ende des Kalenderjahres, in dem das fristauslösende Ereignis eingetreten ist. Im Fall laufender Vertragsverhältnisse, in deren Rahmen Daten gespeichert werden, ist das fristauslösende Ereignis der Zeitpunkt des Wirksamwerdens der Kündigung oder sonstige Beendigung des Rechtsverhältnisses.</p>
+
+      <h3 id="de-m10">Rechte der betroffenen Personen</h3>
+      <p>Rechte der betroffenen Personen aus der DSGVO: Ihnen stehen als Betroffene nach der DSGVO verschiedene Rechte zu, die sich insbesondere aus Art. 15 bis 21 DSGVO ergeben:</p>
+      <ul>
+        <li><strong>Widerspruchsrecht: Sie haben das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung der Sie betreffenden personenbezogenen Daten, die aufgrund von Art. 6 Abs. 1 lit. e oder f DSGVO erfolgt, Widerspruch einzulegen; dies gilt auch für ein auf diese Bestimmungen gestütztes Profiling. Werden die Sie betreffenden personenbezogenen Daten verarbeitet, um Direktwerbung zu betreiben, haben Sie das Recht, jederzeit Widerspruch gegen die Verarbeitung der Sie betreffenden personenbezogenen Daten zum Zwecke derartiger Werbung einzulegen; dies gilt auch für das Profiling, soweit es mit solcher Direktwerbung in Verbindung steht.</strong></li>
+        <li><strong>Widerrufsrecht bei Einwilligungen:</strong> Sie haben das Recht, erteilte Einwilligungen jederzeit zu widerrufen.</li>
+        <li><strong>Auskunftsrecht:</strong> Sie haben das Recht, eine Bestätigung darüber zu verlangen, ob betreffende Daten verarbeitet werden und auf Auskunft über diese Daten sowie auf weitere Informationen und Kopie der Daten entsprechend den gesetzlichen Vorgaben.</li>
+        <li><strong>Recht auf Berichtigung:</strong> Sie haben entsprechend den gesetzlichen Vorgaben das Recht, die Vervollständigung der Sie betreffenden Daten oder die Berichtigung der Sie betreffenden unrichtigen Daten zu verlangen.</li>
+        <li><strong>Recht auf Löschung und Einschränkung der Verarbeitung:</strong> Sie haben nach Maßgabe der gesetzlichen Vorgaben das Recht, zu verlangen, dass Sie betreffende Daten unverzüglich gelöscht werden, bzw. alternativ nach Maßgabe der gesetzlichen Vorgaben eine Einschränkung der Verarbeitung der Daten zu verlangen.</li>
+        <li><strong>Recht auf Datenübertragbarkeit:</strong> Sie haben das Recht, Sie betreffende Daten, die Sie uns bereitgestellt haben, nach Maßgabe der gesetzlichen Vorgaben in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten oder deren Übermittlung an einen anderen Verantwortlichen zu fordern.</li>
+        <li><strong>Beschwerde bei Aufsichtsbehörde:</strong> Sie haben unbeschadet eines anderweitigen verwaltungsrechtlichen oder gerichtlichen Rechtsbehelfs das Recht auf Beschwerde bei einer Aufsichtsbehörde, insbesondere in dem Mitgliedstaat ihres gewöhnlichen Aufenthaltsorts, ihres Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes, wenn Sie der Ansicht sind, dass die Verarbeitung der Sie betreffenden personenbezogenen Daten gegen die Vorgaben der DSGVO verstößt.</li>
+      </ul>
+
+      <h3 id="de-m225">Bereitstellung des Onlineangebots und Webhosting</h3>
+      <p>Wir verarbeiten die Daten der Nutzer, um ihnen unsere Online-Dienste zur Verfügung stellen zu können. Zu diesem Zweck verarbeiten wir die IP-Adresse des Nutzers, die notwendig ist, um die Inhalte und Funktionen unserer Online-Dienste an den Browser oder das Endgerät der Nutzer zu übermitteln.</p>
+      <ul>
+        <li><strong>Verarbeitete Datenarten:</strong> Nutzungsdaten (z. B. Seitenaufrufe und Verweildauer, Klickpfade, Nutzungsintensität und -frequenz, verwendete Gerätetypen und Betriebssysteme, Interaktionen mit Inhalten und Funktionen); Meta-, Kommunikations- und Verfahrensdaten (z. B. IP-Adressen, Zeitangaben, Identifikationsnummern, beteiligte Personen). Protokolldaten (z. B. Logfiles betreffend Logins oder den Abruf von Daten oder Zugriffszeiten.).</li>
+        <li><strong>Betroffene Personen:</strong> Nutzer (z. B. Webseitenbesucher, Nutzer von Onlinediensten).</li>
+        <li><strong>Zwecke der Verarbeitung und berechtigte Interessen:</strong> Bereitstellung unseres Onlineangebotes und Nutzerfreundlichkeit; Informationstechnische Infrastruktur (Betrieb und Bereitstellung von Informationssystemen und technischen Geräten (Computer, Server etc.)). Sicherheitsmaßnahmen.</li>
+        <li><strong>Aufbewahrung und Löschung:</strong> Löschung entsprechend Angaben im Abschnitt "Allgemeine Informationen zur Datenspeicherung und Löschung".</li>
+        <li><strong>Rechtsgrundlagen:</strong> Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f) DSGVO).</li>
+      </ul>
+      <p><strong>Weitere Hinweise zu Verarbeitungsprozessen, Verfahren und Diensten:</strong></p>
+      <ul>
+        <li><strong>Bereitstellung Onlineangebot auf gemietetem Speicherplatz: </strong>Für die Bereitstellung unseres Onlineangebotes nutzen wir Speicherplatz, Rechenkapazität und Software, die wir von einem entsprechenden Serveranbieter (auch "Webhoster" genannt) mieten oder anderweitig beziehen; <strong>Rechtsgrundlagen:</strong> Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f) DSGVO).</li>
+        <li><strong>Erhebung von Zugriffsdaten und Logfiles: </strong>Der Zugriff auf unser Onlineangebot wird in Form von sogenannten "Server-Logfiles" protokolliert. Zu den Serverlogfiles können die Adresse und der Name der abgerufenen Webseiten und Dateien, Datum und Uhrzeit des Abrufs, übertragene Datenmengen, Meldung über erfolgreichen Abruf, Browsertyp nebst Version, das Betriebssystem des Nutzers, Referrer URL (die zuvor besuchte Seite) und im Regelfall IP-Adressen und der anfragende Provider gehören. Die Serverlogfiles können zum einen zu Sicherheitszwecken eingesetzt werden, z. B. um eine Überlastung der Server zu vermeiden (insbesondere im Fall von missbräuchlichen Angriffen, sogenannten DDoS-Attacken), und zum anderen, um die Auslastung der Server und ihre Stabilität sicherzustellen; <strong>Rechtsgrundlagen:</strong> Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f) DSGVO). <strong>Löschung von Daten:</strong> Logfile-Informationen werden für die Dauer von maximal 30 Tagen gespeichert und danach gelöscht oder anonymisiert. Daten, deren weitere Aufbewahrung zu Beweiszwecken erforderlich ist, sind bis zur endgültigen Klärung des jeweiligen Vorfalls von der Löschung ausgenommen.</li>
+      </ul>
+
+      <h3 id="de-m182">Kontakt- und Anfrageverwaltung</h3>
+      <p>Bei der Kontaktaufnahme mit uns (z. B. per Post, E-Mail, Telefon oder via soziale Medien) sowie im Rahmen bestehender Nutzer- und Geschäftsbeziehungen werden die Angaben der anfragenden Personen verarbeitet, soweit dies zur Beantwortung der Kontaktanfragen und etwaiger angefragter Maßnahmen erforderlich ist.</p>
+      <ul>
+        <li><strong>Verarbeitete Datenarten:</strong> Kontaktdaten (z. B. Post- und E-Mail-Adressen oder Telefonnummern); Inhaltsdaten (z. B. textliche oder bildliche Nachrichten und Beiträge sowie die sie betreffenden Informationen, wie z. B. Angaben zur Autorenschaft oder Zeitpunkt der Erstellung). Meta-, Kommunikations- und Verfahrensdaten (z. B. IP-Adressen, Zeitangaben, Identifikationsnummern, beteiligte Personen).</li>
+        <li><strong>Betroffene Personen:</strong> Kommunikationspartner.</li>
+        <li><strong>Zwecke der Verarbeitung und berechtigte Interessen:</strong> Kommunikation; Organisations- und Verwaltungsverfahren; Feedback. Bereitstellung unseres Onlineangebotes und Nutzerfreundlichkeit.</li>
+        <li><strong>Aufbewahrung und Löschung:</strong> Löschung entsprechend Angaben im Abschnitt "Allgemeine Informationen zur Datenspeicherung und Löschung".</li>
+        <li><strong>Rechtsgrundlagen:</strong> Berechtigte Interessen (Art. 6 Abs. 1 S. 1 lit. f) DSGVO). Vertragserfüllung und vorvertragliche Anfragen (Art. 6 Abs. 1 S. 1 lit. b) DSGVO).</li>
+      </ul>
+
+      <h3 id="de-m15">Änderung und Aktualisierung</h3>
+      <p>Wir bitten Sie, sich regelmäßig über den Inhalt unserer Datenschutzerklärung zu informieren. Wir passen die Datenschutzerklärung an, sobald die Änderungen der von uns durchgeführten Datenverarbeitungen dies erforderlich machen. Wir informieren Sie, sobald durch die Änderungen eine Mitwirkungshandlung Ihrerseits (z. B. Einwilligung) oder eine sonstige individuelle Benachrichtigung erforderlich wird.</p>
+      <p>Sofern wir in dieser Datenschutzerklärung Adressen und Kontaktinformationen von Unternehmen und Organisationen angeben, bitten wir zu beachten, dass die Adressen sich über die Zeit ändern können und bitten die Angaben vor Kontaktaufnahme zu prüfen.</p>
+
+      <h3 id="de-m42">Begriffsdefinitionen</h3>
+      <p>In diesem Abschnitt erhalten Sie eine Übersicht über die in dieser Datenschutzerklärung verwendeten Begrifflichkeiten. Soweit die Begrifflichkeiten gesetzlich definiert sind, gelten deren gesetzliche Definitionen. Die nachfolgenden Erläuterungen sollen dagegen vor allem dem Verständnis dienen.</p>
+      <ul>
+        <li><strong>Inhaltsdaten:</strong> Inhaltsdaten umfassen Informationen, die im Zuge der Erstellung, Bearbeitung und Veröffentlichung von Inhalten aller Art generiert werden. Diese Kategorie von Daten kann Texte, Bilder, Videos, Audiodateien und andere multimediale Inhalte einschließen, die auf verschiedenen Plattformen und Medien veröffentlicht werden. Inhaltsdaten sind nicht nur auf den eigentlichen Inhalt beschränkt, sondern beinhalten auch Metadaten, die Informationen über den Inhalt selbst liefern, wie Tags, Beschreibungen, Autoreninformationen und Veröffentlichungsdaten</li>
+        <li><strong>Kontaktdaten:</strong> Kontaktdaten sind essentielle Informationen, die die Kommunikation mit Personen oder Organisationen ermöglichen. Sie umfassen u.a. Telefonnummern, postalische Adressen und E-Mail-Adressen, sowie Kommunikationsmittel wie soziale Medien-Handles und Instant-Messaging-Identifikatoren.</li>
+        <li><strong>Meta-, Kommunikations- und Verfahrensdaten:</strong> Meta-, Kommunikations- und Verfahrensdaten sind Kategorien, die Informationen über die Art und Weise enthalten, wie Daten verarbeitet, übermittelt und verwaltet werden. Meta-Daten, auch bekannt als Daten über Daten, umfassen Informationen, die den Kontext, die Herkunft und die Struktur anderer Daten beschreiben. Sie können Angaben zur Dateigröße, dem Erstellungsdatum, dem Autor eines Dokuments und den Änderungshistorien beinhalten. Kommunikationsdaten erfassen den Austausch von Informationen zwischen Nutzern über verschiedene Kanäle, wie E-Mail-Verkehr, Anrufprotokolle, Nachrichten in sozialen Netzwerken und Chat-Verläufe, inklusive der beteiligten Personen, Zeitstempel und Übertragungswege. Verfahrensdaten beschreiben die Prozesse und Abläufe innerhalb von Systemen oder Organisationen, einschließlich Workflow-Dokumentationen, Protokolle von Transaktionen und Aktivitäten, sowie Audit-Logs, die zur Nachverfolgung und Überprüfung von Vorgängen verwendet werden.</li>
+        <li><strong>Nutzungsdaten:</strong> Nutzungsdaten beziehen sich auf Informationen, die erfassen, wie Nutzer mit digitalen Produkten, Dienstleistungen oder Plattformen interagieren. Diese Daten umfassen eine breite Palette von Informationen, die aufzeigen, wie Nutzer Anwendungen nutzen, welche Funktionen sie bevorzugen, wie lange sie auf bestimmten Seiten verweilen und über welche Pfade sie durch eine Anwendung navigieren. Nutzungsdaten können auch die Häufigkeit der Nutzung, Zeitstempel von Aktivitäten, IP-Adressen, Geräteinformationen und Standortdaten einschließen. Sie sind besonders wertvoll für die Analyse des Nutzerverhaltens, die Optimierung von Benutzererfahrungen, das Personalisieren von Inhalten und das Verbessern von Produkten oder Dienstleistungen. Darüber hinaus spielen Nutzungsdaten eine entscheidende Rolle beim Erkennen von Trends, Vorlieben und möglichen Problembereichen innerhalb digitaler Angebote</li>
+        <li><strong>Personenbezogene Daten:</strong> "Personenbezogene Daten" sind alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person (im Folgenden "betroffene Person") beziehen; als identifizierbar wird eine natürliche Person angesehen, die direkt oder indirekt, insbesondere mittels Zuordnung zu einer Kennung wie einem Namen, zu einer Kennnummer, zu Standortdaten, zu einer Online-Kennung (z. B. Cookie) oder zu einem oder mehreren besonderen Merkmalen identifiziert werden kann, die Ausdruck der physischen, physiologischen, genetischen, psychischen, wirtschaftlichen, kulturellen oder sozialen Identität dieser natürlichen Person sind.</li>
+        <li><strong>Protokolldaten:</strong> Protokolldaten sind Informationen über Ereignisse oder Aktivitäten, die in einem System oder Netzwerk protokolliert wurden. Diese Daten enthalten typischerweise Informationen wie Zeitstempel, IP-Adressen, Benutzeraktionen, Fehlermeldungen und andere Details über die Nutzung oder den Betrieb eines Systems. Protokolldaten werden oft zur Analyse von Systemproblemen, zur Sicherheitsüberwachung oder zur Erstellung von Leistungsberichten verwendet.</li>
+        <li><strong>Verantwortlicher:</strong> Als "Verantwortlicher" wird die natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten entscheidet, bezeichnet.</li>
+        <li><strong>Verarbeitung:</strong> "Verarbeitung" ist jeder mit oder ohne Hilfe automatisierter Verfahren ausgeführte Vorgang oder jede solche Vorgangsreihe im Zusammenhang mit personenbezogenen Daten. Der Begriff reicht weit und umfasst praktisch jeden Umgang mit Daten, sei es das Erheben, das Auswerten, das Speichern, das Übermitteln oder das Löschen.</li>
+      </ul>
+
+      <p class="seal"><a href="https://datenschutz-generator.de/" title="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken." target="_blank" rel="noopener noreferrer nofollow">Erstellt mit kostenlosem Datenschutz-Generator.de von Dr. Thomas Schwenke</a></p>
+    </div>
+  </section>
+
+  <section id="terms">
+    <div class="head"><i>T</i><h2>Terms of Use</h2></div>
+    <p class="lede">
+      The conditions the app ships under.
+    </p>
+
+    <div class="blocks">
+      <div class="block">
+        <h3>Licence</h3>
+        <p>
+          You receive a personal, non-transferable licence to use the app on
+          devices associated with your Apple Account in accordance with Apple's
+          standard licence terms.
+        </p>
+      </div>
+
+      <div class="block">
+        <h3>Warranty and liability</h3>
+        <p>
+          The app is provided "as is". RTTG Development cannot guarantee
+          uninterrupted or error-free operation. Your statutory rights remain
+          unaffected.
+        </p>
+      </div>
+
+      <div class="block">
+        <h3>Attribution</h3>
+        <p>
+          This application is an independently developed implementation inspired
+          by the original 2048 game. All code, design and additional features
+          were created independently by RTTG Development.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="imprint">
+    <div class="head"><i>I</i><h2>Imprint</h2></div>
+    <p class="lede">
+      Information pursuant to § 5 DDG (German Digital Services Act). The same details go into the EU trader declaration
+      in App Store Connect, where they appear publicly on the store listing.
+    </p>
+
+    <div class="fields">
+      <div class="field"><b>Name</b><span>Viktor Rotgang</span></div>
+      <div class="field"><b>Address</b><span>Märkische Straße 14<br>44866 Bochum<br>Germany</span></div>
+      <div class="field"><b>Email</b><span><a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></span></div>
+      <div class="field"><b>Responsible for content</b><span>Viktor Rotgang</span></div>
+    </div>
+  </section>
+
+  <section id="support">
+    <div class="head"><i>S</i><h2>Support</h2></div>
+    <p class="lede">
+      Questions, bug reports, or anything else about the game.
+    </p>
+
+    <div class="blocks">
+      <div class="block">
+        <h3>Getting in touch</h3>
+        <p><a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
+        <p>
+          Please include your device model, iOS version, app version and a short
+          description of the problem.
+        </p>
+      </div>
+
+      <div class="block">
+        <h3>Common questions</h3>
+        <p>
+          Game progress is stored locally on your device. If you delete the app,
+          local save data may be removed. Expand Mode gradually increases the
+          board size during gameplay.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <b>2048</b>
+    <span>Version 1.0 · Last updated: 6 August 2026</span>
+  </footer>
+
+</div>
+
+<script>
+  // Zwei Fassungen desselben Rechtstextes, eine sichtbar. Ohne Skript
+  // bleibt die englische stehen — sie ist vollständig, es fehlt also
+  // nichts, nur der Weg zur deutschen.
+  (function () {
+    var docs = document.querySelectorAll(".doc[data-lang]");
+    var switches = document.querySelectorAll("[data-switch]");
+
+    function show(lang) {
+      docs.forEach(function (doc) {
+        doc.hidden = doc.getAttribute("data-lang") !== lang;
+      });
+      document.querySelectorAll(".langbar button").forEach(function (button) {
+        button.setAttribute("aria-pressed",
+          String(button.getAttribute("data-switch") === lang));
+      });
+    }
+
+    switches.forEach(function (control) {
+      control.addEventListener("click", function (event) {
+        event.preventDefault();
+        show(control.getAttribute("data-switch"));
+      });
+    });
+  })();
+</script>
+</body>
+</html>
