@@ -1,0 +1,6 @@
+{
+  "redirects": [
+    { "source": "/emba", "destination": "/", "permanent": true },
+    { "source": "/emba/", "destination": "/", "permanent": true }
+  ]
+}
