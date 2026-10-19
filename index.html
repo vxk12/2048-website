@@ -136,6 +136,8 @@
   /* ---------------- Abschnitte ---------------- */
 
   .lang { display: flex; flex-direction: column; gap: 56px; }
+  /* Sonst gewinnt display:flex gegen hidden und beide Sprachen stehen untereinander. */
+  .lang[hidden] { display: none; }
   section { scroll-margin-top: 24px; }
   .head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
   /* Statt Kacheln kleine Sphären, von hell nach dunkel durch die Teal-Skala. */
@@ -456,8 +458,24 @@
       document.documentElement.lang = lang;
     }
 
+    // Beim Wechsel bleibt man im selben Abschnitt, z. B. Support → Support.
+    var pairs = { "de-datenschutz": "en-privacy", "de-bedingungen": "en-terms", "de-impressum": "en-imprint", "de-support": "en-support" };
+    function counterpart(id) {
+      if (pairs[id]) return pairs[id];
+      for (var k in pairs) if (pairs[k] === id) return k;
+      return null;
+    }
+
     document.querySelectorAll("[data-switch]").forEach(function (b) {
-      b.addEventListener("click", function () { show(b.getAttribute("data-switch")); });
+      b.addEventListener("click", function () {
+        var lang = b.getAttribute("data-switch");
+        var other = counterpart(location.hash.slice(1));
+        show(lang);
+        if (other && other.slice(0, 2) === lang) {
+          history.replaceState(null, "", "#" + other);
+          document.getElementById(other).scrollIntoView();
+        }
+      });
     });
     show(initial);
     if (hash) { var target = document.getElementById(hash); if (target) target.scrollIntoView(); }
