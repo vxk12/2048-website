@@ -2,586 +2,504 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Emba — Coming soon to the App Store</title>
-<meta name="description" content="Emba has you say your own affirmation out loud before Instagram or TikTok opens. Join the waitlist.">
-<meta name="color-scheme" content="dark light">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><radialGradient id='g' cx='35%25' cy='30%25' r='75%25'><stop offset='0' stop-color='%23F0FDF9'/><stop offset='.45' stop-color='%2386E3CF'/><stop offset='1' stop-color='%2335736A'/></radialGradient></defs><rect width='32' height='32' rx='7' fill='%23112C2B'/><circle cx='16' cy='16' r='10' fill='url(%23g)'/></svg>">
-</head>
-<body>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emba: say it before you scroll</title>
+<meta name="description" content="Emba asks you to say your own affirmation out loud before Instagram or TikTok opens. Join the waitlist.">
+<meta name="theme-color" content="#071512">
+<meta property="og:title" content="Emba: say it before you scroll">
+<meta property="og:description" content="Say your own affirmation out loud before Instagram or TikTok opens. Coming soon to the App Store.">
+<meta property="og:image" content="https://www.getemba.app/img/en-bingo.webp">
+<link rel="icon" href="/img/favicon.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="preload" as="image" href="/img/en-intercept.webp">
+<script>
+  // Old links from the App Store and the app point at /#en-privacy and the like. The hash never
+  // reaches the server, so the forwarding has to happen here, before anything renders.
+  (function () {
+    var map = { "de-datenschutz": "/datenschutz", "en-privacy": "/privacy", "de-bedingungen": "/nutzungsbedingungen",
+                "en-terms": "/terms", "de-impressum": "/impressum", "en-imprint": "/imprint",
+                "de-support": "/support#de", "en-support": "/support" };
+    var to = map[location.hash.slice(1)];
+    if (to) location.replace(to);
+  })();
+</script>
 <style>
-  /* Aufbau wie die 2048-Seite, die Farben aus Emba: dunkles Grün,
-     die Teal-Skala der App und die leuchtende Sphäre als Logo. */
+  /* Emba's own look: the dark forest green of the app, its teal scale and the glowing orb.
+     Dark only on purpose, the app has no light mode either.
+     Shapes: everything you press is a pill, every surface is 28px, the phones are 44px. */
   :root {
-    --ground:   #071512;
-    --raised:   #0F2622;
-    --sunk:     #0B1D1A;
-    --ink:      #F0FDF9;
-    --ink-soft: #86E3CF;
-    --line:     #264B47;
-
-    --t200: #A9EEDC;
-    --t300: #86E3CF;
-    --t400: #66CDBC;
-    --t500: #4FAE9F;
-    --t600: #3E8C81;
-
-    --accent:     var(--t500);
-    --accent-ink: #071512;
-    --accent-lip: #2D5C56;
-
-    --serif: "New York", ui-serif, Georgia, serif;
-    --rounded: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, sans-serif;
-    --text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --measure: 68ch;
+    --ground: #071512;
+    --ground-2: #0A1C18;
+    --raised: #0F2622;
+    --line: #1E3C37;
+    --ink: #F0FDF9;
+    --ink-soft: #A7CFC6;
+    --ink-faint: #6E968D;
+    --teal: #86E3CF;
+    --accent: #5BC2B0;
+    --accent-ink: #062420;
+    --serif: "New York", ui-serif, "Iowan Old Style", Georgia, serif;
+    --sans: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    color-scheme: dark;
   }
-  @media (prefers-color-scheme: light) {
-    :root:not([data-theme="dark"]) {
-      --ground:   #F0FDF9;
-      --raised:   #D2F7EC;
-      --sunk:     #E3FAF3;
-      --ink:      #112C2B;
-      --ink-soft: #35736A;
-      --line:     #A9EEDC;
-      --accent-ink: #FFFFFF;
-      --accent-lip: #35736A;
-    }
-  }
-  :root[data-theme="light"] {
-    --ground:   #F0FDF9;
-    --raised:   #D2F7EC;
-    --sunk:     #E3FAF3;
-    --ink:      #112C2B;
-    --ink-soft: #35736A;
-    --line:     #A9EEDC;
-    --accent-ink: #FFFFFF;
-    --accent-lip: #35736A;
-  }
-
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
     background: var(--ground);
     color: var(--ink);
-    font-family: var(--text);
+    font-family: var(--sans);
     font-size: 17px;
-    line-height: 1.65;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
-
-  .page {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: clamp(28px, 6vw, 64px) clamp(16px, 5vw, 32px) 96px;
-    display: flex;
-    flex-direction: column;
-    gap: 56px;
-  }
-
   a { color: inherit; }
+  img { display: block; max-width: 100%; }
+  .wrap { width: min(1160px, 100% - 32px); margin-inline: auto; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-  /* ---------------- Kopf: Sphäre und Name ---------------- */
+  /* The light behind the hero: two soft teal glows that drift slowly, like the orb breathing. */
+  .aura { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .aura::before, .aura::after {
+    content: ""; position: absolute; border-radius: 50%; filter: blur(80px);
+  }
+  .aura::before { width: 60vmax; height: 60vmax; left: 40%; top: -25vmax; background: rgb(91 194 176 / 0.16); }
+  .aura::after { width: 45vmax; height: 45vmax; left: -15vmax; top: 30vh; background: rgb(53 115 106 / 0.18); }
+  main, header, footer { position: relative; z-index: 1; }
 
-  .masthead { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  /* ---------------- Top bar ---------------- */
+
+  .bar { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-family: var(--serif); font-size: 1.6rem; }
   .orb {
-    width: clamp(56px, 14vw, 72px);
-    aspect-ratio: 1;
-    border-radius: 50%;
+    width: 34px; aspect-ratio: 1; border-radius: 50%; flex: none;
     background:
       radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.9) 0 7%, transparent 18%),
       radial-gradient(circle at 36% 30%, #F0FDF9, #A9EEDC 30%, #66CDBC 58%, #35736A 92%);
-    box-shadow: 0 0 34px rgb(134 227 207 / 0.55), 0 0 10px rgb(102 205 188 / 0.5);
-    animation: glow 4s ease-in-out infinite;
+    box-shadow: 0 0 24px rgb(134 227 207 / 0.45);
   }
-  @keyframes glow { 50% { box-shadow: 0 0 46px rgb(134 227 207 / 0.75), 0 0 12px rgb(102 205 188 / 0.6); } }
-  .wordmark { font-family: var(--serif); font-size: clamp(2.4rem, 8vw, 3.2rem); line-height: 1; }
-  .masthead .spacer { flex: 1; }
-
-  /* ---------------- Sprache ---------------- */
-
-  .langbar { display: flex; gap: 8px; }
-  .langbar button {
-    font-family: var(--rounded);
-    font-weight: 800;
-    font-size: 0.82rem;
-    color: var(--ink);
-    background: var(--raised);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 7px 16px;
-    cursor: pointer;
+  .lang { display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--raised); border: 1px solid var(--line); }
+  .lang button {
+    font: 700 0.8rem/1 var(--sans); color: var(--ink-soft); background: none; border: 0;
+    border-radius: 999px; padding: 8px 12px; cursor: pointer;
   }
-  .langbar button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-  .langbar button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--ground); }
+  .lang button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
 
-  /* ---------------- Reiter ---------------- */
+  /* ---------------- Hero ---------------- */
 
-  nav { display: flex; flex-wrap: wrap; gap: 10px; }
-  nav a {
-    font-family: var(--rounded);
-    font-weight: 800;
-    font-size: 0.95rem;
-    text-decoration: none;
-    color: var(--ink);
-    background: var(--raised);
-    border-radius: 14px;
-    padding: 11px 18px;
-    box-shadow: 0 4px 0 var(--line);
-    transition: transform 0.14s ease, box-shadow 0.14s ease;
+  .hero {
+    display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: center; gap: 48px;
+    min-height: calc(100dvh - 72px); padding: 24px 0 64px;
   }
-  nav a:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--line); }
-  nav a:active { transform: translateY(4px); box-shadow: 0 0 0 var(--line); }
-  nav a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-  nav a.is-primary { background: var(--accent); color: var(--accent-ink); box-shadow: 0 4px 0 var(--accent-lip); }
-
-  /* ---------------- Abschnitte ---------------- */
-
-  .lang { display: flex; flex-direction: column; gap: 56px; }
-  /* Sonst gewinnt display:flex gegen hidden und beide Sprachen stehen untereinander. */
-  .lang[hidden] { display: none; }
-  section { scroll-margin-top: 24px; }
-  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
-  /* Statt Kacheln kleine Sphären, von hell nach dunkel durch die Teal-Skala. */
-  .head i {
-    width: 44px; height: 44px; flex: none;
-    display: grid; place-items: center;
-    border-radius: 50%;
-    font-family: var(--rounded);
-    font-weight: 900; font-style: normal; font-size: 1.1rem;
-    color: #071512;
+  .hero h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(2.6rem, 5.4vw, 4.4rem); line-height: 1.06; letter-spacing: -0.02em;
+    margin: 0 0 22px; text-wrap: balance;
   }
-  section:nth-of-type(1) .head i { background: radial-gradient(circle at 35% 30%, #F0FDF9, var(--t200)); }
-  section:nth-of-type(2) .head i { background: radial-gradient(circle at 35% 30%, #D2F7EC, var(--t300)); }
-  section:nth-of-type(3) .head i { background: radial-gradient(circle at 35% 30%, #A9EEDC, var(--t400)); }
-  section:nth-of-type(4) .head i { background: radial-gradient(circle at 35% 30%, #86E3CF, var(--t500)); }
+  /* The headline lights up word by word, the way your belief lights up in the app while you say it. */
+  .hero h1 .w { transition: opacity 0.5s var(--ease), text-shadow 0.8s var(--ease); }
+  .js .hero h1 .w { opacity: 0.22; }
+  .js .hero h1 .w.lit { opacity: 1; text-shadow: 0 0 28px rgb(134 227 207 / 0.35); }
+  .hero .sub { font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--ink-soft); max-width: 34ch; margin: 0 0 32px; }
 
+  /* ---------------- Signup ---------------- */
+
+  .signup { max-width: 470px; }
+  .signup form {
+    display: flex; gap: 6px; padding: 6px; border-radius: 999px;
+    background: rgb(15 38 34 / 0.85); border: 1px solid var(--line);
+    transition: border-color 0.2s, box-shadow 0.3s;
+  }
+  .signup form:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgb(91 194 176 / 0.15); }
+  .signup input {
+    flex: 1; min-width: 0; font: inherit; font-size: 17px; /* below 16px iOS zooms in while typing */
+    color: var(--ink); background: none; border: 0; outline: none; padding: 12px 8px 12px 18px;
+  }
+  .signup input::placeholder { color: var(--ink-faint); }
+  .signup button {
+    flex: none; font: 800 1rem/1 var(--sans); color: var(--accent-ink); background: var(--accent);
+    border: 0; border-radius: 999px; padding: 15px 22px; cursor: pointer; white-space: nowrap;
+    transition: transform 0.15s var(--ease), background 0.2s;
+  }
+  .signup button:hover { background: var(--teal); }
+  .signup button:active { transform: scale(0.97); }
+  .signup button:disabled { opacity: 0.6; cursor: default; transform: none; }
+  .signup button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .signup .fine { margin: 12px 0 0 18px; font-size: 0.8rem; color: var(--ink-faint); }
+  .signup .fine a { color: var(--ink-soft); }
+  .signup .error { margin: 12px 0 0 18px; font-size: 0.9rem; color: #FFB4A8; }
+  .signup .error:empty { display: none; }
+  /* After sending, the field turns into the confirmation, so the change happens where you were looking. */
+  .signup .done {
+    display: none; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 28px;
+    background: var(--raised); border: 1px solid var(--accent);
+  }
+  .signup .done svg { width: 30px; height: 30px; color: var(--teal); flex: none; }
+  .signup .done b { display: block; font-size: 1.02rem; }
+  .signup .done span { color: var(--ink-soft); font-size: 0.92rem; }
+  .signup.sent form, .signup.sent .fine { display: none; }
+  .signup.sent .done { display: flex; animation: pop 0.5s var(--ease); }
+  @keyframes pop { from { opacity: 0; transform: scale(0.96); } }
+
+  /* ---------------- Phone ---------------- */
+
+  .phone {
+    position: relative; width: min(310px, 80vw); aspect-ratio: 660 / 1434; margin-inline: auto;
+    border-radius: 44px; overflow: hidden; background: #0B1D1A;
+    box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18), 0 0 0 9px #0C1F1B, 0 0 0 10px rgb(134 227 207 / 0.12),
+                0 40px 90px -20px rgb(0 0 0 / 0.7), 0 0 120px -30px rgb(91 194 176 / 0.45);
+  }
+  .phone img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.7s var(--ease); }
+  .hero .phone { transform: rotate(2deg); }
+  .hero .phone .after { opacity: 0; }
+  .hero .phone.said .after { opacity: 1; }
+  .hero .phone.said .before { opacity: 0; }
+
+  /* ---------------- Steps: sticky phone on the left, the steps scroll past ---------------- */
+
+  section { padding: clamp(72px, 12vw, 140px) 0; }
   h2 {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: clamp(1.6rem, 4vw, 2rem);
-    margin: 0;
-    text-wrap: balance;
+    font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 4.2vw, 3.2rem);
+    line-height: 1.1; letter-spacing: -0.015em; margin: 0 0 18px; text-wrap: balance;
   }
-  .lede { max-width: var(--measure); margin: 0 0 24px; color: var(--ink-soft); }
+  .steps { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; }
+  .steps .stage { position: sticky; top: calc(50dvh - 300px); height: 600px; display: grid; place-items: center; }
+  .steps .stage img { opacity: 0; }
+  .steps .stage img.on { opacity: 1; }
+  .steps h2 { margin-bottom: 8px; }
+  .step { min-height: 62vh; display: flex; flex-direction: column; justify-content: center; max-width: 30rem; }
+  .step .num {
+    width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 18px;
+    font-weight: 800; color: var(--ink-faint); border: 1px solid var(--line);
+    transition: color 0.4s, background 0.4s, border-color 0.4s;
+  }
+  .step.on .num { color: var(--accent-ink); background: var(--accent); border-color: var(--accent); }
+  .step h3 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.6rem, 2.6vw, 2.1rem); line-height: 1.15; margin: 0 0 10px; }
+  .step p { margin: 0; color: var(--ink-soft); font-size: 1.1rem; }
+  .step .shot { display: none; }
+  .js .step h3, .js .step p { transition: opacity 0.5s; }
+  .js .step:not(.on) h3, .js .step:not(.on) p { opacity: 0.35; }
 
-  .blocks { display: flex; flex-direction: column; gap: 16px; }
-  .block { background: var(--raised); border-radius: 18px; padding: 20px 22px; }
-  .block h3 {
-    font-family: var(--rounded);
-    font-weight: 800;
-    font-size: 0.72rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    margin: 0 0 8px;
-  }
-  .block p { margin: 0 0 10px; max-width: var(--measure); }
-  .block p:last-child { margin-bottom: 0; }
-  .block ul { margin: 0 0 10px; padding-left: 1.25em; }
-  .block li { margin-bottom: 6px; }
+  /* ---------------- The science: one statement ---------------- */
 
-  .fields { display: grid; gap: 12px; }
-  @media (min-width: 620px) { .fields { grid-template-columns: 1fr 1fr; } }
-  .field { background: var(--raised); border-radius: 14px; padding: 14px 16px; }
-  .field b {
-    display: block;
-    font-family: var(--rounded);
-    font-weight: 800;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-    margin-bottom: 4px;
+  .truth { text-align: center; }
+  .truth blockquote {
+    font-family: var(--serif); font-size: clamp(2.2rem, 6vw, 4.6rem); line-height: 1.05; letter-spacing: -0.02em;
+    margin: 0 auto 28px; max-width: 16ch; text-wrap: balance;
+  }
+  .truth blockquote em { font-style: italic; color: var(--teal); }
+  .truth p { color: var(--ink-soft); max-width: 46ch; margin: 0 auto; font-size: 1.12rem; }
+
+  /* ---------------- What else: a bento of three ---------------- */
+
+  .bento { display: grid; grid-template-columns: 1.2fr 1fr; grid-template-rows: auto auto; gap: 16px; }
+  .tile {
+    position: relative; overflow: hidden; border-radius: 28px; background: var(--raised);
+    border: 1px solid var(--line); padding: 32px;
+  }
+  .tile h3 { font-family: var(--serif); font-weight: 400; font-size: 1.7rem; line-height: 1.15; margin: 0 0 8px; }
+  .tile p { margin: 0; color: var(--ink-soft); max-width: 30ch; }
+  .tile .icon { width: 28px; height: 28px; color: var(--teal); margin-bottom: 18px; }
+  .tile.streak { grid-row: span 2; display: flex; flex-direction: column; padding-bottom: 0; }
+  .tile.streak .crop { margin: 32px auto 0; width: min(300px, 90%); border-radius: 40px 40px 0 0; overflow: hidden; flex: 1; min-height: 360px;
+                       box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18); }
+  .tile.streak .crop img { width: 100%; object-fit: cover; object-position: top; }
+  .tile.flip { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; align-items: center; padding-right: 0; padding-bottom: 0; }
+  /* Only the card from the screenshot, cut so it runs off the tile's edge. */
+  .tile.flip img { border-radius: 22px 0 0 0; align-self: end; width: 100%; height: 280px; object-fit: cover; object-position: 0 22%;
+                   box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18); }
+  .tile.private { background: radial-gradient(circle at 85% 15%, rgb(91 194 176 / 0.28), transparent 55%), var(--raised); }
+
+  /* ---------------- Last call ---------------- */
+
+  .last { text-align: center; }
+  .last .big-orb {
+    width: 120px; aspect-ratio: 1; margin: 0 auto 36px; border-radius: 50%;
+    background:
+      radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.9) 0 7%, transparent 18%),
+      radial-gradient(circle at 36% 30%, #F0FDF9, #A9EEDC 30%, #66CDBC 58%, #35736A 92%);
+    box-shadow: 0 0 60px rgb(134 227 207 / 0.5), 0 0 16px rgb(102 205 188 / 0.5);
+  }
+  .last h2 { margin-bottom: 12px; }
+  .last > .wrap > p { color: var(--ink-soft); margin: 0 0 32px; }
+  .last .signup { margin-inline: auto; text-align: left; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--ink-faint); font-size: 0.9rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  footer a { color: var(--ink-soft); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+
+  /* Sections rise in as they come into view. */
+  .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+  .js .reveal.in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .aura::before { animation: drift 18s ease-in-out infinite alternate; }
+    .aura::after { animation: drift 24s ease-in-out infinite alternate-reverse; }
+    .orb, .last .big-orb { animation: breathe 4s ease-in-out infinite; }
+    .hero .phone { animation: float 7s ease-in-out infinite; }
+  }
+  @keyframes drift { to { transform: translate(-8vmax, 6vmax) scale(1.08); } }
+  @keyframes breathe { 50% { box-shadow: 0 0 70px rgb(134 227 207 / 0.7), 0 0 18px rgb(102 205 188 / 0.6); } }
+  @keyframes float { 50% { transform: rotate(2deg) translateY(-12px); } }
+  @media (prefers-reduced-motion: reduce) {
+    .js .reveal, .js .hero h1 .w { opacity: 1; transform: none; transition: none; }
+    .phone img, .step h3, .step p { transition: none; }
   }
 
-  /* ---------------- Warteliste ---------------- */
+  /* ---------------- Phones and small tablets: one column ---------------- */
 
-  .waitlist { background: var(--raised); border-radius: 24px; padding: clamp(22px, 5vw, 36px); }
-  .waitlist h1 {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: clamp(2rem, 7vw, 2.8rem);
-    line-height: 1.1;
-    margin: 0 0 14px;
-    text-wrap: balance;
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; min-height: 0; gap: 56px; padding-top: 16px; }
+    .hero .sub { max-width: none; }
+    .steps { grid-template-columns: 1fr; gap: 0; }
+    .steps .stage { display: none; }
+    .step { min-height: 0; padding: 40px 0; max-width: none; }
+    .step .shot { display: block; position: relative; width: min(260px, 72vw); margin: 28px auto 0; }
+    .js .step:not(.on) h3, .js .step:not(.on) p { opacity: 1; }
+    .bento { grid-template-columns: 1fr; }
+    .tile.streak { grid-row: auto; }
+    .tile.flip { grid-template-columns: 1fr; padding-right: 26px; }
+    .tile.flip img { border-radius: 22px 22px 0 0; height: 240px; }
   }
-  .waitlist > p { margin: 0 0 22px; max-width: var(--measure); color: var(--ink-soft); }
-  .waitlist form { display: flex; flex-wrap: wrap; gap: 10px; }
-  .waitlist form[hidden] { display: none; }
-  .waitlist input {
-    flex: 1 1 220px;
-    min-width: 0;
-    font: inherit;
-    font-size: 17px; /* unter 16px zoomt iOS beim Tippen in die Seite */
-    color: var(--ink);
-    background: var(--ground);
-    border: 2px solid var(--line);
-    border-radius: 14px;
-    padding: 12px 16px;
+  @media (max-width: 420px) {
+    .signup form { flex-direction: column; border-radius: 28px; }
+    .signup input { padding: 14px 16px; }
+    .signup button { padding: 16px; }
+    .tile { padding: 26px; }
   }
-  .waitlist input:focus-visible { outline: none; border-color: var(--accent); }
-  .waitlist button {
-    flex: 0 0 auto;
-    font-family: var(--rounded);
-    font-weight: 800;
-    font-size: 1rem;
-    color: var(--accent-ink);
-    background: var(--accent);
-    border: 0;
-    border-radius: 14px;
-    padding: 12px 22px;
-    box-shadow: 0 4px 0 var(--accent-lip);
-    cursor: pointer;
-  }
-  .waitlist button:active { transform: translateY(4px); box-shadow: none; }
-  .waitlist button:disabled { opacity: 0.6; cursor: default; }
-  .waitlist button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-  .waitlist small { display: block; margin-top: 12px; font-size: 0.82rem; color: var(--ink-soft); }
-  .waitlist .status { margin: 12px 0 0; font-weight: 600; color: var(--ink); }
-  .waitlist .status:empty { display: none; }
-
-  footer {
-    border-top: 2px solid var(--line);
-    padding-top: 22px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 24px;
-    align-items: baseline;
-    color: var(--ink-soft);
-    font-size: 0.9rem;
-  }
-  footer b { font-family: var(--serif); font-weight: 400; font-size: 1.1rem; color: var(--ink); }
-
-  @media (prefers-reduced-motion: reduce) { .orb { animation: none; } nav a { transition: none; } }
 </style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"></div>
 
-<div class="page">
+<header class="wrap bar">
+  <a class="brand" href="/"><span class="orb" aria-hidden="true"></span>Emba</a>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-set="en" aria-pressed="true">EN</button>
+    <button type="button" data-set="de" aria-pressed="false">DE</button>
+  </div>
+</header>
 
-  <header class="masthead">
-    <div class="orb" aria-hidden="true"></div>
-    <div class="wordmark">Emba</div>
-    <div class="spacer"></div>
-    <div class="langbar" role="group" aria-label="Sprache / Language">
-      <button type="button" data-switch="en" aria-pressed="true">English</button>
-      <button type="button" data-switch="de" aria-pressed="false">Deutsch</button>
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1 data-de="Bevor du scrollst, sag, wer du sein willst.">Before you scroll, say who you want to be.</h1>
+      <p class="sub" data-de="Emba lässt dich deinen eigenen Glaubenssatz laut sagen, bevor sich Instagram oder TikTok öffnet.">Emba asks you to say your own affirmation out loud before Instagram or TikTok opens.</p>
+      <div class="signup"></div>
     </div>
-  </header>
-
-  <!-- ============================ DEUTSCH ============================ -->
-  <div class="lang" data-lang="de" lang="de" hidden>
-
-    <div class="waitlist" id="de-waitlist">
-      <h1>Bevor du scrollst, sag, wer du sein willst.</h1>
-      <p>Emba lässt dich deinen eigenen Glaubenssatz laut aussprechen, bevor sich Instagram oder TikTok öffnet. Emba kommt bald in den App Store. Trag dich ein, und wir schreiben dir, sobald es so weit ist.</p>
-      <form action="https://assets.mailerlite.com/jsonp/2731535/forms/201965836229936412/subscribe" method="post" data-ok="Fast geschafft! Schau in dein Postfach und bestätige deine E-Mail-Adresse." data-err="Das hat nicht geklappt. Prüf deine E-Mail-Adresse und versuch es nochmal.">
-        <input type="email" name="fields[email]" required autocomplete="email" placeholder="Deine E-Mail-Adresse" aria-label="Deine E-Mail-Adresse">
-        <input type="hidden" name="ml-submit" value="1">
-        <input type="hidden" name="anticsrf" value="true">
-        <button type="submit">Auf die Warteliste</button>
-      </form>
-      <p class="status" role="status"></p>
-      <small>Du bekommst zuerst eine Mail zum Bestätigen. Danach schreiben wir dir nur zum Start und zu Neuigkeiten von Emba. Abmelden geht jederzeit. Mehr dazu im <a href="#de-datenschutz">Datenschutz</a>.</small>
+    <div class="phone" aria-hidden="true">
+      <img class="before" src="/img/en-intercept.webp" data-de-src="/img/de-intercept.webp" alt="">
+      <img class="after" src="/img/en-bingo.webp" data-de-src="/img/de-bingo.webp" alt="">
     </div>
-
-    <nav aria-label="Abschnitte">
-      <a class="is-primary" href="#de-datenschutz">Datenschutz</a>
-      <a href="#de-bedingungen">Nutzungsbedingungen</a>
-      <a href="#de-impressum">Impressum</a>
-      <a href="#de-support">Support</a>
-    </nav>
-
-    <section id="de-datenschutz">
-      <div class="head"><i>D</i><h2>Datenschutz</h2></div>
-      <p class="lede">Stand: 21. Oktober 2026. Emba braucht kein Konto und hat keinen eigenen Server. Alles, was du in Emba einträgst, bleibt auf deinem iPhone. Über die App sammeln wir keine Daten über dich, nutzen keine Analyse- oder Werbedienste und verfolgen dich nicht.</p>
-      <div class="blocks">
-        <div class="block">
-          <h3>Verantwortlich</h3>
-          <p>Viktor Rotgang, Märkische Straße 14, 44866 Bochum, Deutschland<br>E-Mail: <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
-        </div>
-        <div class="block">
-          <h3>Was nur auf deinem Gerät gespeichert wird</h3>
-          <p>Damit die App funktioniert, speichert Emba auf deinem iPhone: deinen Vornamen, deine gewählten Themen, deine eigenen Glaubenssätze, deine Favoriten, die Anzahl deiner Erinnerungen, die Tage, an denen du die App geöffnet hast (für deine Serie), deine App-Block-Einstellungen und die Zahlen in der Zusammenfassung.</p>
-          <p>Diese Daten werden nicht an uns übertragen. Sie können Teil deines iPhone-Backups werden, wenn du Backups über iCloud oder deinen Computer eingeschaltet hast; dafür gelten die Bedingungen von Apple. Wenn du Emba löschst, werden sie vom Gerät entfernt.</p>
-        </div>
-        <div class="block">
-          <h3>Mikrofon und Spracherkennung</h3>
-          <p>Wenn du deinen Glaubenssatz laut aussprichst, nutzt Emba das Mikrofon und die Spracherkennung von Apple, um zu prüfen, ob du ihn gesagt hast. Kann dein iPhone die Sprache direkt auf dem Gerät erkennen, verlässt die Aufnahme dein iPhone nicht. Andernfalls wird sie zur Erkennung an Apple übertragen; dafür gilt die <a href="https://www.apple.com/legal/privacy/">Datenschutzrichtlinie von Apple</a>.</p>
-          <p>Emba speichert keine Aufnahmen und sendet weder Aufnahmen noch erkannten Text an uns. Den Zugriff kannst du jederzeit in den iPhone-Einstellungen widerrufen und deinen Glaubenssatz stattdessen schreiben.</p>
-        </div>
-        <div class="block">
-          <h3>Mitteilungen</h3>
-          <p>Erinnerungen an deine Glaubenssätze und an das Ende einer Testphase werden lokal auf deinem iPhone geplant. Dafür wird kein Server genutzt.</p>
-        </div>
-        <div class="block">
-          <h3>App-Block, Bildschirmzeit und Kurzbefehle</h3>
-          <p>Der App-Block funktioniert über eine Automation in Apples Kurzbefehle-App, die auf deinem iPhone läuft. Wählst du Apps aus Apples Bildschirmzeit-Liste, erhält Emba nur verschlüsselte Kennungen, nicht den Namen der App oder deine Nutzung. Diese Kennungen bleiben auf deinem Gerät.</p>
-        </div>
-        <div class="block">
-          <h3>Fotos</h3>
-          <p>Sicherst du eine Affirmations-Karte als Bild, fragt Emba nur nach der Erlaubnis, ein Bild zu deinen Fotos hinzuzufügen. Emba kann deine Fotos nicht lesen.</p>
-        </div>
-        <div class="block">
-          <h3>Käufe, Download und Bewertungen</h3>
-          <p>Emba und Emba+ werden über den App Store von Apple angeboten. Apple wickelt Download und Zahlung als eigener Verantwortlicher ab; wir erhalten keine Zahlungs- oder Kontodaten. Emba prüft auf deinem iPhone über Apple, ob ein Abonnement aktiv ist.</p>
-          <p>Von Apple erhalten wir zusammengefasste Verkaufs- und Downloadzahlen sowie Absturzberichte nur von Menschen, die „Mit App-Entwicklern teilen“ eingeschaltet haben; diese Daten lassen keine Rückschlüsse auf einzelne Personen zu. Bittet dich Emba um eine Bewertung, öffnet sich Apples eigene Bewertungsfunktion.</p>
-        </div>
-        <div class="block">
-          <h3>Diese Website</h3>
-          <p>Diese Seite wird bei Vercel Inc. (USA) gehostet. Beim Aufruf verarbeitet Vercel technisch notwendige Daten wie IP-Adresse, Zeitpunkt und aufgerufene Seite in Server-Logdateien, um die Seite auszuliefern und vor Missbrauch zu schützen (Art. 6 Abs. 1 lit. f DSGVO). Vercel ist nach dem EU-US Data Privacy Framework zertifiziert. Wir setzen auf dieser Seite keine Cookies und keine Analyse-Werkzeuge ein.</p>
-        </div>
-        <div class="block">
-          <h3>Warteliste und E-Mails</h3>
-          <p>Wenn du dich auf dieser Seite für die Warteliste einträgst, speichern wir deine E-Mail-Adresse, den Zeitpunkt der Anmeldung und der Bestätigung sowie die dabei verwendete IP-Adresse. Wir nutzen das nur, um dir zum Start von Emba und zu Neuigkeiten zu schreiben. Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO). Du bekommst zuerst eine Bestätigungsmail; erst wenn du darin auf den Link tippst, wirst du eingetragen (Double-Opt-in).</p>
-          <p>Für den Versand nutzen wir MailerLite (UAB „MailerLite“, J. Basanavičiaus 15, LT-03108 Vilnius, Litauen) als Auftragsverarbeiter. MailerLite erfasst, ob eine E-Mail geöffnet und ob ein Link darin angeklickt wurde, damit wir sehen, welche Inhalte ankommen. Du kannst deine Einwilligung jederzeit widerrufen, über den Abmeldelink in jeder E-Mail oder per Mail an <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>. Dann löschen wir deine Adresse von der Liste.</p>
-        </div>
-        <div class="block">
-          <h3>Deine Rechte</h3>
-          <p>Nach der DSGVO hast du das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Da wir keine personenbezogenen Daten aus der App speichern, kannst du deine Daten jederzeit selbst in der App ändern oder durch Löschen der App entfernen. Bei Fragen schreib an <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>.</p>
-          <p>Emba richtet sich nicht an Kinder unter 16 Jahren. Ändert sich die App, passen wir diese Erklärung an; es gilt die hier veröffentlichte Fassung.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="de-bedingungen">
-      <div class="head"><i>N</i><h2>Nutzungsbedingungen</h2></div>
-      <div class="blocks">
-        <div class="block">
-          <h3>Lizenz</h3>
-          <p>Für die Nutzung von Emba gilt der <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Standard-Lizenzvertrag für Endnutzer (EULA) von Apple</a>.</p>
-        </div>
-        <div class="block">
-          <h3>Emba+</h3>
-          <p>Emba+ ist ein Abonnement mit automatischer Verlängerung, monatlich oder jährlich. Der Preis wird vor dem Kauf in der App angezeigt. Die Zahlung wird bei Bestätigung des Kaufs über deinen Apple-Account abgebucht. Das Abo verlängert sich automatisch, wenn es nicht mindestens 24 Stunden vor Ende des Zeitraums gekündigt wird.</p>
-          <p>Gibt es eine kostenlose Testphase, wird nach ihrem Ende der Abopreis berechnet, sofern du nicht vorher kündigst. Kündigen und verwalten kannst du dein Abo jederzeit in den iPhone-Einstellungen unter deinem Namen → Abonnements.</p>
-        </div>
-        <div class="block">
-          <h3>Hinweis</h3>
-          <p>Emba ist eine App zur persönlichen Motivation. Sie ersetzt keine medizinische, psychologische oder therapeutische Beratung oder Behandlung.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="de-impressum">
-      <div class="head"><i>I</i><h2>Impressum</h2></div>
-      <p class="lede">Angaben gemäß § 5 DDG.</p>
-      <div class="fields">
-        <div class="field"><b>Name</b><span>Viktor Rotgang</span></div>
-        <div class="field"><b>Anschrift</b><span>Märkische Straße 14<br>44866 Bochum<br>Deutschland</span></div>
-        <div class="field"><b>E-Mail</b><span><a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></span></div>
-        <div class="field"><b>Verantwortlich für den Inhalt</b><span>Viktor Rotgang</span></div>
-      </div>
-    </section>
-
-    <section id="de-support">
-      <div class="head"><i>S</i><h2>Support</h2></div>
-      <p class="lede">Fragen, Fehler oder Ideen zu Emba.</p>
-      <div class="blocks">
-        <div class="block">
-          <h3>Kontakt</h3>
-          <p><a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
-          <p>Schreib bitte dein iPhone-Modell, deine iOS-Version und kurz das Problem dazu.</p>
-        </div>
-        <div class="block">
-          <h3>Häufige Fragen</h3>
-          <p><b>Der App-Block greift nicht.</b> Öffne in Emba den Tab „App-Block“, tippe auf die App und gehe Schritt 1 erneut durch. Achte beim Hinzufügen des Kurzbefehls darauf, „Automation“ einzuschalten.</p>
-          <p><b>Ich habe Emba+ gekauft, sehe es aber nicht.</b> Tippe im Profil auf „Käufe wiederherstellen“.</p>
-          <p><b>Wie kündige ich Emba+?</b> In den iPhone-Einstellungen unter deinem Namen → Abonnements → Emba.</p>
-          <p><b>Ich kann gerade nicht sprechen.</b> Tippe über dem Mikrofon-Button auf „Kannst gerade nicht reden? Schreib ihn“ und schreib deinen Glaubenssatz.</p>
-        </div>
-      </div>
-    </section>
   </div>
 
-  <!-- ============================ ENGLISH ============================ -->
-  <div class="lang" data-lang="en" lang="en">
-
-    <div class="waitlist" id="en-waitlist">
-      <h1>Before you scroll, say who you want to be.</h1>
-      <p>Emba has you say one of your own affirmations out loud before Instagram or TikTok opens. Emba is coming soon to the App Store. Join the waitlist and we&#39;ll email you the moment it&#39;s out.</p>
-      <form action="https://assets.mailerlite.com/jsonp/2731535/forms/201965836229936412/subscribe" method="post" data-ok="Almost there! Check your inbox and confirm your email address." data-err="That didn&#39;t work. Check your email address and try again.">
-        <input type="email" name="fields[email]" required autocomplete="email" placeholder="Your email address" aria-label="Your email address">
-        <input type="hidden" name="ml-submit" value="1">
-        <input type="hidden" name="anticsrf" value="true">
-        <button type="submit">Join the waitlist</button>
-      </form>
-      <p class="status" role="status"></p>
-      <small>You&#39;ll get a confirmation email first. After that we only write about Emba&#39;s launch and news. Unsubscribe anytime. See the <a href="#en-privacy">privacy policy</a>.</small>
+  <section class="wrap steps" aria-labelledby="how">
+    <div class="stage" aria-hidden="true">
+      <div class="phone">
+        <img class="on" src="/img/en-appblock.webp" data-de-src="/img/de-appblock.webp" alt="">
+        <img src="/img/en-intercept.webp" data-de-src="/img/de-intercept.webp" alt="">
+        <img src="/img/en-bingo.webp" data-de-src="/img/de-bingo.webp" alt="">
+      </div>
     </div>
+    <div>
+      <h2 id="how" class="reveal" data-de="Ein Satz zwischen dir und dem Feed.">One sentence between you and the feed.</h2>
+      <div class="step on" data-i="0">
+        <div class="num">1</div>
+        <h3 data-de="Wähl deine Apps">Pick your apps</h3>
+        <p data-de="Die Apps, in denen du am meisten hängen bleibst: Instagram, TikTok, YouTube und mehr.">The ones you lose the most time in: Instagram, TikTok, YouTube and more.</p>
+        <div class="phone shot"><img src="/img/en-appblock.webp" data-de-src="/img/de-appblock.webp" alt="Emba's App Block screen with Instagram, TikTok and YouTube turned on" data-de-alt="Der App-Block in Emba mit Instagram, TikTok und YouTube" loading="lazy"></div>
+      </div>
+      <div class="step" data-i="1">
+        <div class="num">2</div>
+        <h3 data-de="Emba fragt zuerst">Emba asks first</h3>
+        <p data-de="Öffnest du eine davon, zeigt Emba dir zuerst einen deiner eigenen Glaubenssätze.">When you open one, Emba shows you one of your own beliefs before anything else.</p>
+        <div class="phone shot"><img src="/img/en-intercept.webp" data-de-src="/img/de-intercept.webp" alt="Emba pausing Instagram and showing a belief to say out loud" data-de-alt="Emba hält Instagram an und zeigt einen Glaubenssatz zum Aussprechen" loading="lazy"></div>
+      </div>
+      <div class="step" data-i="2">
+        <div class="num">3</div>
+        <h3 data-de="Sag ihn laut">Say it out loud</h3>
+        <p data-de="Die Wörter leuchten auf, während du sprichst. Danach öffnet sich deine App.">The words light up as you speak. Then your app opens.</p>
+        <div class="phone shot"><img src="/img/en-bingo.webp" data-de-src="/img/de-bingo.webp" alt="The belief lit up after saying it, with a check mark" data-de-alt="Der Glaubenssatz leuchtet nach dem Aussprechen, mit Häkchen" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
 
-    <nav aria-label="Sections">
-      <a class="is-primary" href="#en-privacy">Privacy Policy</a>
-      <a href="#en-terms">Terms of Use</a>
-      <a href="#en-imprint">Imprint</a>
-      <a href="#en-support">Support</a>
+  <section class="truth reveal">
+    <div class="wrap">
+      <blockquote data-de="Dein Gehirn glaubt, was es <em>am häufigsten</em> hört.">Your brain believes what it hears <em>most</em>.</blockquote>
+      <p data-de="Psychologen nennen das den Wahrheitseffekt: Je öfter du einen Satz hörst, desto wahrer fühlt er sich an. Mit Emba ist das dein eigener Satz.">Psychologists call it the illusory truth effect: the more often you hear a sentence, the truer it feels. With Emba, that sentence is yours.</p>
+    </div>
+  </section>
+
+  <section class="wrap bento" aria-label="More in Emba" data-de-aria="Mehr in Emba">
+    <div class="tile streak reveal">
+      <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.79,51.48a221.25,221.25,0,0,0-41.67-34.34,8,8,0,0,0-8.24,0A221.25,221.25,0,0,0,82.21,51.48C54.59,80.48,40,112.47,40,144a88,88,0,0,0,176,0C216,112.47,201.41,80.48,173.79,51.48ZM96,184c0-27.67,22.53-47.28,32-54.3,9.48,7,32,26.63,32,54.3a32,32,0,0,1-64,0Zm77.27,15.93A47.8,47.8,0,0,0,176,184c0-44-42.09-69.79-43.88-70.86a8,8,0,0,0-8.24,0C122.09,114.21,80,140,80,184a47.8,47.8,0,0,0,2.73,15.93A71.88,71.88,0,0,1,56,144c0-34.41,20.4-63.15,37.52-81.19A216.21,216.21,0,0,1,128,33.54a215.77,215.77,0,0,1,34.48,29.27C193.49,95.5,200,125,200,144A71.88,71.88,0,0,1,173.27,199.93Z"/></svg>
+      <h3 data-de="Jeder Tag zählt">Every day counts</h3>
+      <p data-de="Jeder Tag mit deinen Glaubenssätzen hält dein Feuer am Brennen.">Each day with your beliefs keeps your fire burning.</p>
+      <div class="crop"><img src="/img/en-streak.webp" data-de-src="/img/de-streak.webp" alt="A six day streak in Emba" data-de-alt="Eine Serie von sechs Tagen in Emba" loading="lazy"></div>
+    </div>
+    <div class="tile flip reveal">
+      <div>
+        <h3 data-de="Wisse, warum">Know why it works</h3>
+        <p data-de="Dreh eine Karte um und lies die Idee hinter jedem Satz.">Flip a card to read the idea behind every sentence.</p>
+      </div>
+      <img src="/img/en-flip.webp" data-de-src="/img/de-flip.webp" alt="The back of an affirmation card explaining it" data-de-alt="Die Rückseite einer Karte mit der Erklärung" loading="lazy">
+    </div>
+    <div class="tile private reveal">
+      <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg>
+      <h3 data-de="Bleibt auf deinem iPhone">Stays on your iPhone</h3>
+      <p data-de="Kein Konto, kein Server. Deine Glaubenssätze verlassen dein Handy nie.">No account, no server. Your beliefs never leave your phone.</p>
+    </div>
+  </section>
+
+  <section class="last reveal">
+    <div class="wrap">
+      <div class="big-orb" aria-hidden="true"></div>
+      <h2 data-de="Sei unter den Ersten.">Be one of the first.</h2>
+      <p data-de="Emba kommt bald in den App Store, fürs iPhone.">Emba is coming soon to the App Store, for iPhone.</p>
+      <div class="signup"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Viktor Rotgang</span>
+    <nav aria-label="Legal" data-de-aria="Rechtliches">
+      <a href="/privacy" data-de-href="/datenschutz" data-de="Datenschutz">Privacy</a>
+      <a href="/terms" data-de-href="/nutzungsbedingungen" data-de="Nutzungsbedingungen">Terms</a>
+      <a href="/imprint" data-de-href="/impressum" data-de="Impressum">Imprint</a>
+      <a href="/support" data-de-href="/support#de">Support</a>
     </nav>
-
-    <section id="en-privacy">
-      <div class="head"><i>P</i><h2>Privacy Policy</h2></div>
-      <p class="lede">Last updated: October 21, 2026. Emba doesn't need an account and has no server of its own. Everything you enter in Emba stays on your iPhone. Through the app we don't collect any data about you, don't use analytics or advertising services, and don't track you.</p>
-      <div class="blocks">
-        <div class="block">
-          <h3>Who is responsible</h3>
-          <p>Viktor Rotgang, Märkische Straße 14, 44866 Bochum, Germany<br>Email: <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
-        </div>
-        <div class="block">
-          <h3>What is stored only on your device</h3>
-          <p>To work, Emba stores on your iPhone: your first name, the themes you chose, your own beliefs, your favorites, the number of reminders, the days you opened the app (for your streak), your App Block settings and the numbers in the summary.</p>
-          <p>This data is not sent to us. It may become part of your iPhone backup if you have backups to iCloud or your computer turned on; Apple's terms apply to those. When you delete Emba, it is removed from the device.</p>
-        </div>
-        <div class="block">
-          <h3>Microphone and speech recognition</h3>
-          <p>When you say your belief out loud, Emba uses the microphone and Apple's speech recognition to check that you said it. If your iPhone can recognize the language on the device, the recording never leaves your iPhone. Otherwise it is sent to Apple for recognition; <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a> applies.</p>
-          <p>Emba doesn't store recordings and doesn't send recordings or recognized text to us. You can revoke access at any time in your iPhone settings and type your belief instead.</p>
-        </div>
-        <div class="block">
-          <h3>Notifications</h3>
-          <p>Reminders of your beliefs and of the end of a free trial are scheduled locally on your iPhone. No server is involved.</p>
-        </div>
-        <div class="block">
-          <h3>App Block, Screen Time and Shortcuts</h3>
-          <p>App Block works through an automation in Apple's Shortcuts app that runs on your iPhone. If you choose apps from Apple's Screen Time list, Emba only receives encrypted identifiers, not the app's name or your usage. These identifiers stay on your device.</p>
-        </div>
-        <div class="block">
-          <h3>Photos</h3>
-          <p>When you save an affirmation card as an image, Emba only asks for permission to add an image to your photos. Emba can't read your photos.</p>
-        </div>
-        <div class="block">
-          <h3>Purchases, downloads and ratings</h3>
-          <p>Emba and Emba+ are offered through Apple's App Store. Apple handles downloads and payment as an independent controller; we don't receive any payment or account details. On your iPhone, Emba checks with Apple whether a subscription is active.</p>
-          <p>From Apple we receive aggregated sales and download figures, and crash reports only from people who turned on "Share With App Developers"; this data doesn't identify anyone. If Emba asks you for a rating, Apple's own rating prompt opens.</p>
-        </div>
-        <div class="block">
-          <h3>This website</h3>
-          <p>This page is hosted by Vercel Inc. (USA). When you visit it, Vercel processes technically necessary data such as your IP address, the time and the page requested in server log files to deliver the page and protect it from abuse (Art. 6(1)(f) GDPR). Vercel is certified under the EU-US Data Privacy Framework. We don't use cookies or analytics tools on this page.</p>
-        </div>
-        <div class="block">
-          <h3>Waitlist and emails</h3>
-          <p>If you join the waitlist on this page, we store your email address, the time you signed up and confirmed, and the IP address used. We only use this to email you about Emba's launch and news. The legal basis is your consent (Art. 6(1)(a) GDPR). You'll get a confirmation email first; you're only added once you tap the link in it (double opt-in).</p>
-          <p>We send these emails with MailerLite (UAB "MailerLite", J. Basanavičiaus 15, LT-03108 Vilnius, Lithuania) as our processor. MailerLite records whether an email was opened and whether a link in it was clicked, so we can see what resonates. You can withdraw your consent at any time via the unsubscribe link in every email or by writing to <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>. We then remove your address from the list.</p>
-        </div>
-        <div class="block">
-          <h3>Your rights</h3>
-          <p>Under the GDPR you have the right of access, rectification, erasure, restriction of processing, data portability and objection, as well as the right to lodge a complaint with a data protection authority. Since we don't store any personal data from the app, you can change your data in the app at any time or remove it by deleting the app. If you have questions, write to <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>.</p>
-          <p>Emba is not directed at children under 16. If the app changes, we will update this policy; the version published here applies.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="en-terms">
-      <div class="head"><i>T</i><h2>Terms of Use</h2></div>
-      <div class="blocks">
-        <div class="block">
-          <h3>Licence</h3>
-          <p>Use of Emba is governed by <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Apple's Standard Licensed Application End User License Agreement (EULA)</a>.</p>
-        </div>
-        <div class="block">
-          <h3>Emba+</h3>
-          <p>Emba+ is an auto-renewable subscription, monthly or yearly. The price is shown in the app before you buy. Payment is charged to your Apple Account when you confirm the purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period.</p>
-          <p>If a free trial is offered, the subscription price is charged when it ends unless you cancel before. You can manage or cancel your subscription anytime in your iPhone settings under your name → Subscriptions.</p>
-        </div>
-        <div class="block">
-          <h3>Note</h3>
-          <p>Emba is an app for personal motivation. It does not replace medical, psychological or therapeutic advice or treatment.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="en-imprint">
-      <div class="head"><i>I</i><h2>Imprint</h2></div>
-      <p class="lede">Information pursuant to § 5 DDG (German Digital Services Act).</p>
-      <div class="fields">
-        <div class="field"><b>Name</b><span>Viktor Rotgang</span></div>
-        <div class="field"><b>Address</b><span>Märkische Straße 14<br>44866 Bochum<br>Germany</span></div>
-        <div class="field"><b>Email</b><span><a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></span></div>
-        <div class="field"><b>Responsible for content</b><span>Viktor Rotgang</span></div>
-      </div>
-    </section>
-
-    <section id="en-support">
-      <div class="head"><i>S</i><h2>Support</h2></div>
-      <p class="lede">Questions, bug reports or ideas about Emba.</p>
-      <div class="blocks">
-        <div class="block">
-          <h3>Getting in touch</h3>
-          <p><a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
-          <p>Please include your iPhone model, iOS version and a short description of the problem.</p>
-        </div>
-        <div class="block">
-          <h3>Common questions</h3>
-          <p><b>App Block doesn't kick in.</b> In Emba, open the App Block tab, tap the app and go through step 1 again. When adding the shortcut, make sure to turn on "Automation".</p>
-          <p><b>I bought Emba+ but don't see it.</b> Tap "Restore purchases" in your profile.</p>
-          <p><b>How do I cancel Emba+?</b> In your iPhone settings under your name → Subscriptions → Emba.</p>
-          <p><b>I can't speak right now.</b> Tap "Can't talk right now? Type it" above the microphone button and type your belief.</p>
-        </div>
-      </div>
-    </section>
   </div>
+</footer>
 
-  <footer>
-    <b>Emba</b>
-    <span>Viktor Rotgang · <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></span>
-  </footer>
-
-</div>
+<template id="signup">
+  <form action="https://assets.mailerlite.com/jsonp/2731535/forms/201965836229936412/subscribe" method="post" novalidate>
+    <label class="sr-only" data-de="E-Mail-Adresse">Email address</label>
+    <input type="email" name="fields[email]" required autocomplete="email" placeholder="you@example.com" data-de-placeholder="du@beispiel.de">
+    <input type="hidden" name="ml-submit" value="1">
+    <input type="hidden" name="anticsrf" value="true">
+    <button type="submit" data-de="Auf die Warteliste">Join the waitlist</button>
+  </form>
+  <p class="error" role="alert"></p>
+  <p class="fine" data-de='Mit Bestätigungsmail. Abmelden jederzeit. <a href="/datenschutz">Datenschutz</a>'>Confirmation email first. Unsubscribe anytime. <a href="/privacy">Privacy</a></p>
+  <div class="done" role="status">
+    <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+    <div>
+      <b data-de="Fast geschafft.">Almost there.</b>
+      <span data-de="Schau in dein Postfach und bestätige deine E-Mail-Adresse.">Check your inbox and confirm your email address.</span>
+    </div>
+  </div>
+</template>
 
 <script>
-  // Englisch, außer der Link aus der App sagt Deutsch (#de-…).
-  (function () {
-    var hash = location.hash.slice(1);
-    var initial = /^(de|en)-/.test(hash) ? hash.slice(0, 2) : "en";
+(function () {
+  var root = document.documentElement;
+  root.classList.add("js");
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    function show(lang) {
-      document.querySelectorAll(".lang[data-lang]").forEach(function (el) {
-        el.hidden = el.getAttribute("data-lang") !== lang;
-      });
-      document.querySelectorAll(".langbar button").forEach(function (b) {
-        b.setAttribute("aria-pressed", String(b.getAttribute("data-switch") === lang));
-      });
-      document.documentElement.lang = lang;
-    }
+  // Both signup spots get the same form.
+  var tpl = document.getElementById("signup");
+  document.querySelectorAll(".signup").forEach(function (box, i) {
+    box.appendChild(tpl.content.cloneNode(true));
+    var input = box.querySelector("input[type=email]");
+    input.id = "email-" + i;
+    box.querySelector("label").htmlFor = input.id;
+  });
 
-    // Beim Wechsel bleibt man im selben Abschnitt, z. B. Support → Support.
-    var pairs = { "de-datenschutz": "en-privacy", "de-bedingungen": "en-terms", "de-impressum": "en-imprint", "de-support": "en-support" };
-    function counterpart(id) {
-      if (pairs[id]) return pairs[id];
-      for (var k in pairs) if (pairs[k] === id) return k;
-      return null;
-    }
-
-    document.querySelectorAll("[data-switch]").forEach(function (b) {
-      b.addEventListener("click", function () {
-        var lang = b.getAttribute("data-switch");
-        var other = counterpart(location.hash.slice(1));
-        show(lang);
-        if (other && other.slice(0, 2) === lang) {
-          history.replaceState(null, "", "#" + other);
-          document.getElementById(other).scrollIntoView();
-        }
+  // ---------------- Language: English by default, German on request ----------------
+  var lang = "en";
+  function setLang(next) {
+    lang = next;
+    root.lang = next;
+    document.querySelectorAll("[data-de]").forEach(function (el) {
+      if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+      el.innerHTML = next === "de" ? el.dataset.de : el.dataset.en;
+    });
+    [["src", "deSrc"], ["alt", "deAlt"], ["href", "deHref"], ["placeholder", "dePlaceholder"], ["aria-label", "deAria"]].forEach(function (pair) {
+      document.querySelectorAll("[data-" + pair[1].replace(/[A-Z]/g, function (c) { return "-" + c.toLowerCase(); }) + "]").forEach(function (el) {
+        var key = "en" + pair[1].slice(2);
+        if (el.dataset[key] === undefined) el.dataset[key] = el.getAttribute(pair[0]);
+        el.setAttribute(pair[0], next === "de" ? el.dataset[pair[1]] : el.dataset[key]);
       });
     });
-    show(initial);
-    if (hash) { var target = document.getElementById(hash); if (target) target.scrollIntoView(); }
-  })();
-  // Warteliste: direkt an MailerLite senden und das Ergebnis hier zeigen statt in einem neuen Tab.
-  document.querySelectorAll(".waitlist form").forEach(function (form) {
-    var status = form.parentNode.querySelector(".status");
+    document.querySelectorAll(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.set === next)); });
+    lightUp();
+  }
+  document.querySelectorAll(".lang button").forEach(function (b) {
+    b.addEventListener("click", function () { if (b.dataset.set !== lang) setLang(b.dataset.set); });
+  });
+
+  // ---------------- Hero: the headline lights up word by word ----------------
+  var timers = [];
+  function lightUp() {
+    var h1 = document.querySelector(".hero h1");
+    timers.forEach(clearTimeout); timers = [];
+    h1.innerHTML = h1.textContent.split(" ").map(function (w) { return '<span class="w">' + w + "</span>"; }).join(" ");
+    var words = h1.querySelectorAll(".w");
+    words.forEach(function (w, i) {
+      if (reduce) { w.classList.add("lit"); return; }
+      timers.push(setTimeout(function () { w.classList.add("lit"); }, 350 + i * 190));
+    });
+  }
+
+  // The hero phone plays the moment itself: Emba asks, you say it, the check appears. Then again.
+  var heroPhone = document.querySelector(".hero .phone");
+  if (reduce) heroPhone.classList.add("said");
+  else setInterval(function () { heroPhone.classList.toggle("said"); }, 2800);
+
+  // ---------------- Steps: the sticky phone follows the step in the middle of the screen ----------------
+  var stageImgs = document.querySelectorAll(".steps .stage img");
+  var steps = document.querySelectorAll(".step");
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      steps.forEach(function (s) { s.classList.toggle("on", s === e.target); });
+      stageImgs.forEach(function (img, i) { img.classList.toggle("on", String(i) === e.target.dataset.i); });
+    });
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  steps.forEach(function (s) { io.observe(s); });
+
+  // ---------------- Sections rise in once ----------------
+  var rise = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); rise.unobserve(e.target); } });
+  }, { rootMargin: "0px 0px -12% 0px" });
+  document.querySelectorAll(".reveal").forEach(function (el) { rise.observe(el); });
+
+  // ---------------- Signup: straight to MailerLite, the answer shows up in place ----------------
+  document.querySelectorAll(".signup form").forEach(function (form) {
+    var box = form.parentNode, error = box.querySelector(".error"), button = form.querySelector("button");
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var button = form.querySelector("button");
+      var input = form.querySelector("input[type=email]");
+      if (!input.checkValidity() || !input.value.trim()) {
+        error.textContent = lang === "de" ? "Bitte gib eine gültige E-Mail-Adresse ein." : "Please enter a valid email address.";
+        input.focus();
+        return;
+      }
       button.disabled = true;
-      status.textContent = "";
+      error.textContent = "";
       fetch(form.action, { method: "POST", body: new FormData(form) })
         .then(function (r) { return r.json(); })
         .then(function (res) {
           if (!res.success) throw new Error("rejected");
-          form.hidden = true;
-          status.textContent = form.dataset.ok;
+          box.classList.add("sent");
         })
         .catch(function () {
           button.disabled = false;
-          status.textContent = form.dataset.err;
+          error.textContent = lang === "de" ? "Das hat nicht geklappt. Versuch es bitte nochmal." : "That didn't work. Please try again.";
         });
     });
   });
+
+  setLang(/^de\b/.test(location.hash.slice(1)) ? "de" : "en");
+})();
 </script>
 </body>
 </html>

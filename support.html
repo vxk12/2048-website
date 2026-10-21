@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emba: Support</title>
+<meta name="description" content="Support for Emba, the iOS app by Viktor Rotgang.">
+<meta name="color-scheme" content="dark light">
+<link rel="icon" href="/img/favicon.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+</head>
+<body>
+<style>
+  /* Aufbau wie die 2048-Seite, die Farben aus Emba: dunkles Grün,
+     die Teal-Skala der App und die leuchtende Sphäre als Logo. */
+  :root {
+    --ground:   #071512;
+    --raised:   #0F2622;
+    --sunk:     #0B1D1A;
+    --ink:      #F0FDF9;
+    --ink-soft: #86E3CF;
+    --line:     #264B47;
+
+    --t200: #A9EEDC;
+    --t300: #86E3CF;
+    --t400: #66CDBC;
+    --t500: #4FAE9F;
+    --t600: #3E8C81;
+
+    --accent:     var(--t500);
+    --accent-ink: #071512;
+    --accent-lip: #2D5C56;
+
+    --serif: "New York", ui-serif, Georgia, serif;
+    --rounded: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, sans-serif;
+    --text: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --measure: 68ch;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --ground:   #F0FDF9;
+      --raised:   #D2F7EC;
+      --sunk:     #E3FAF3;
+      --ink:      #112C2B;
+      --ink-soft: #35736A;
+      --line:     #A9EEDC;
+      --accent-ink: #FFFFFF;
+      --accent-lip: #35736A;
+    }
+  }
+  :root[data-theme="light"] {
+    --ground:   #F0FDF9;
+    --raised:   #D2F7EC;
+    --sunk:     #E3FAF3;
+    --ink:      #112C2B;
+    --ink-soft: #35736A;
+    --line:     #A9EEDC;
+    --accent-ink: #FFFFFF;
+    --accent-lip: #35736A;
+  }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--text);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: clamp(28px, 6vw, 64px) clamp(16px, 5vw, 32px) 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  a { color: inherit; }
+
+  /* ---------------- Kopf: Sphäre und Name ---------------- */
+
+  .masthead { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .orb {
+    width: clamp(56px, 14vw, 72px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.9) 0 7%, transparent 18%),
+      radial-gradient(circle at 36% 30%, #F0FDF9, #A9EEDC 30%, #66CDBC 58%, #35736A 92%);
+    box-shadow: 0 0 34px rgb(134 227 207 / 0.55), 0 0 10px rgb(102 205 188 / 0.5);
+    animation: glow 4s ease-in-out infinite;
+  }
+  @keyframes glow { 50% { box-shadow: 0 0 46px rgb(134 227 207 / 0.75), 0 0 12px rgb(102 205 188 / 0.6); } }
+  .wordmark { color: inherit; text-decoration: none; font-family: var(--serif); font-size: clamp(2.4rem, 8vw, 3.2rem); line-height: 1; }
+  .masthead .spacer { flex: 1; }
+
+  /* ---------------- Sprache ---------------- */
+
+  .langbar { display: flex; gap: 8px; }
+  .langbar button {
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.82rem;
+    color: var(--ink);
+    background: var(--raised);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 16px;
+    cursor: pointer;
+  }
+  .langbar button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .langbar button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------------- Reiter ---------------- */
+
+  nav { display: flex; flex-wrap: wrap; gap: 10px; }
+  nav a {
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--raised);
+    border-radius: 14px;
+    padding: 11px 18px;
+    box-shadow: 0 4px 0 var(--line);
+    transition: transform 0.14s ease, box-shadow 0.14s ease;
+  }
+  nav a:hover { transform: translateY(-1px); box-shadow: 0 5px 0 var(--line); }
+  nav a:active { transform: translateY(4px); box-shadow: 0 0 0 var(--line); }
+  nav a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  nav a.is-primary { background: var(--accent); color: var(--accent-ink); box-shadow: 0 4px 0 var(--accent-lip); }
+
+  /* ---------------- Abschnitte ---------------- */
+
+  .lang { display: flex; flex-direction: column; gap: 56px; }
+  /* Sonst gewinnt display:flex gegen hidden und beide Sprachen stehen untereinander. */
+  .lang[hidden] { display: none; }
+  section { scroll-margin-top: 24px; }
+  .head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+  /* Statt Kacheln kleine Sphären, von hell nach dunkel durch die Teal-Skala. */
+  .head i {
+    width: 44px; height: 44px; flex: none;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    font-family: var(--rounded);
+    font-weight: 900; font-style: normal; font-size: 1.1rem;
+    color: #071512;
+  }
+  section:nth-of-type(1) .head i { background: radial-gradient(circle at 35% 30%, #F0FDF9, var(--t200)); }
+  section:nth-of-type(2) .head i { background: radial-gradient(circle at 35% 30%, #D2F7EC, var(--t300)); }
+  section:nth-of-type(3) .head i { background: radial-gradient(circle at 35% 30%, #A9EEDC, var(--t400)); }
+  section:nth-of-type(4) .head i { background: radial-gradient(circle at 35% 30%, #86E3CF, var(--t500)); }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 4vw, 2rem);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede { max-width: var(--measure); margin: 0 0 24px; color: var(--ink-soft); }
+
+  .blocks { display: flex; flex-direction: column; gap: 16px; }
+  .block { background: var(--raised); border-radius: 18px; padding: 20px 22px; }
+  .block h3 {
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+  }
+  .block p { margin: 0 0 10px; max-width: var(--measure); }
+  .block p:last-child { margin-bottom: 0; }
+  .block ul { margin: 0 0 10px; padding-left: 1.25em; }
+  .block li { margin-bottom: 6px; }
+
+  .fields { display: grid; gap: 12px; }
+  @media (min-width: 620px) { .fields { grid-template-columns: 1fr 1fr; } }
+  .field { background: var(--raised); border-radius: 14px; padding: 14px 16px; }
+  .field b {
+    display: block;
+    font-family: var(--rounded);
+    font-weight: 800;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+
+  footer {
+    border-top: 2px solid var(--line);
+    padding-top: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    align-items: baseline;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+  footer b { font-family: var(--serif); font-weight: 400; font-size: 1.1rem; color: var(--ink); }
+
+  .home { font-family: var(--rounded); font-weight: 800; font-size: 0.95rem; text-decoration: none; color: var(--ink-soft); }
+  .home:hover { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) { .orb { animation: none; } nav a { transition: none; } }
+</style>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="orb" aria-hidden="true"></div>
+    <a class="wordmark" href="/">Emba</a>
+    <div class="spacer"></div>
+    <div class="langbar" role="group" aria-label="Sprache / Language">
+      <button type="button" data-switch="en" aria-pressed="true">English</button>
+      <button type="button" data-switch="de" aria-pressed="false">Deutsch</button>
+    </div>
+  </header>
+
+  <div class="lang" data-lang="de" lang="de" hidden>
+    <a class="home" href="/#de">← Zurück zu Emba</a>
+    <nav aria-label="Rechtliches">
+      <a href="/datenschutz">Datenschutz</a>
+      <a href="/nutzungsbedingungen">Nutzungsbedingungen</a>
+      <a href="/impressum">Impressum</a>
+      <a class="is-primary" aria-current="page" href="/support#de">Support</a>
+    </nav>
+    <section id="de-support">
+      <div class="head"><i>S</i><h2>Support</h2></div>
+      <p class="lede">Fragen, Fehler oder Ideen zu Emba.</p>
+      <div class="blocks">
+        <div class="block">
+          <h3>Kontakt</h3>
+          <p><a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
+          <p>Schreib bitte dein iPhone-Modell, deine iOS-Version und kurz das Problem dazu.</p>
+        </div>
+        <div class="block">
+          <h3>Häufige Fragen</h3>
+          <p><b>Der App-Block greift nicht.</b> Öffne in Emba den Tab „App-Block“, tippe auf die App und gehe Schritt 1 erneut durch. Achte beim Hinzufügen des Kurzbefehls darauf, „Automation“ einzuschalten.</p>
+          <p><b>Ich habe Emba+ gekauft, sehe es aber nicht.</b> Tippe im Profil auf „Käufe wiederherstellen“.</p>
+          <p><b>Wie kündige ich Emba+?</b> In den iPhone-Einstellungen unter deinem Namen → Abonnements → Emba.</p>
+          <p><b>Ich kann gerade nicht sprechen.</b> Tippe über dem Mikrofon-Button auf „Kannst gerade nicht reden? Schreib ihn“ und schreib deinen Glaubenssatz.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="lang" data-lang="en" lang="en">
+    <a class="home" href="/">← Back to Emba</a>
+    <nav aria-label="Legal">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Use</a>
+      <a href="/imprint">Imprint</a>
+      <a class="is-primary" aria-current="page" href="/support">Support</a>
+    </nav>
+    <section id="en-support">
+      <div class="head"><i>S</i><h2>Support</h2></div>
+      <p class="lede">Questions, bug reports or ideas about Emba.</p>
+      <div class="blocks">
+        <div class="block">
+          <h3>Getting in touch</h3>
+          <p><a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></p>
+          <p>Please include your iPhone model, iOS version and a short description of the problem.</p>
+        </div>
+        <div class="block">
+          <h3>Common questions</h3>
+          <p><b>App Block doesn't kick in.</b> In Emba, open the App Block tab, tap the app and go through step 1 again. When adding the shortcut, make sure to turn on "Automation".</p>
+          <p><b>I bought Emba+ but don't see it.</b> Tap "Restore purchases" in your profile.</p>
+          <p><b>How do I cancel Emba+?</b> In your iPhone settings under your name → Subscriptions → Emba.</p>
+          <p><b>I can't speak right now.</b> Tap "Can't talk right now? Type it" above the microphone button and type your belief.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <b>Emba</b>
+    <span>Viktor Rotgang · <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a></span>
+  </footer>
+
+</div>
+
+<script>
+  // German when the address says so (/support#de), English otherwise; the buttons switch in place.
+  (function () {
+    var initial = location.pathname.replace(/\/$/, "") === "" || location.hash === "#de" ? "de" : "en";
+    function show(lang) {
+      document.querySelectorAll(".lang[data-lang]").forEach(function (el) { el.hidden = el.getAttribute("data-lang") !== lang; });
+      document.querySelectorAll(".langbar button").forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-switch") === lang));
+      });
+      document.documentElement.lang = lang;
+      document.title = "Emba: " + (lang === "de" ? "Support" : "Support");
+    }
+    document.querySelectorAll("[data-switch]").forEach(function (b) {
+      b.addEventListener("click", function () { show(b.getAttribute("data-switch")); });
+    });
+    show(initial);
+  })();
+</script>
+</body>
+</html>

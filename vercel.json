@@ -1,6 +1,12 @@
 {
+  "cleanUrls": true,
   "redirects": [
     { "source": "/emba", "destination": "/", "permanent": true },
     { "source": "/emba/", "destination": "/", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/datenschutz", "destination": "/privacy" },
+    { "source": "/nutzungsbedingungen", "destination": "/terms" },
+    { "source": "/impressum", "destination": "/imprint" }
   ]
 }
