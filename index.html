@@ -230,15 +230,36 @@
   /* Notifications are live elements so they can arrive one after another, like they do during the day. */
   .notes { position: absolute; left: 4.5%; right: 4.5%; top: 47%; }
   .note {
-    position: absolute; left: 0; right: 0; top: 0; display: flex; gap: 10px; align-items: flex-start; text-align: left;
-    padding: 11px 12px; border-radius: 18px; background: rgb(240 250 247 / 0.86); color: #0A1412;
+    position: absolute; left: 0; right: 0; top: 0; display: flex; gap: 3.4cqw; align-items: flex-start; text-align: left;
+    padding: 3.8cqw 4.1cqw; border-radius: 6.2cqw; background: rgb(240 250 247 / 0.86); color: #0A1412;
     -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
     transition: transform 0.6s var(--ease), opacity 0.5s var(--ease);
   }
-  .note img { width: 30px; height: 30px; border-radius: 8px; flex: none; margin-top: 1px; }
-  .note div { flex: 1; min-width: 0; font-size: 12.5px; line-height: 1.3; }
+  .note img { width: 10.3cqw; height: 10.3cqw; border-radius: 2.8cqw; flex: none; margin-top: 0.3cqw; }
+  .note div { flex: 1; min-width: 0; font-size: 4.3cqw; line-height: 1.3; }
   .note b { display: block; font-weight: 650; }
-  .note time { flex: none; font-size: 11px; color: #5E6E6A; }
+  .note time { flex: none; font-size: 3.8cqw; color: #5E6E6A; }
+
+  /* A finger that shows the cards can be swiped, until someone tries it. */
+  .finger {
+    position: absolute; left: 50%; top: 62%; width: 17cqw; margin-left: -6cqw; z-index: 20; pointer-events: none;
+    color: #F0FDF9; filter: drop-shadow(0 1.5cqw 3cqw rgb(0 0 0 / 0.45)); opacity: 0;
+  }
+  .finger svg { display: block; width: 100%; }
+  .finger::before {
+    content: ""; position: absolute; left: 43%; top: 5%; width: 13cqw; height: 13cqw; margin: -6.5cqw 0 0 -6.5cqw;
+    border-radius: 50%; background: rgb(240 253 249 / 0.35); transform: scale(0); opacity: 0;
+  }
+  .finger.go { animation: finger 1.25s cubic-bezier(0.45, 0, 0.25, 1) forwards; }
+  .finger.go::before { animation: press 1.25s ease-out forwards; }
+  @keyframes finger {
+    0% { opacity: 0; transform: translate(0, 4cqw) scale(1.15); }
+    18% { opacity: 1; transform: translate(0, 0) scale(1); }
+    30% { opacity: 1; transform: translate(0, 0) scale(0.94); }
+    78% { opacity: 1; transform: translate(calc(var(--dir) * 34cqw), -2cqw) scale(0.94); }
+    100% { opacity: 0; transform: translate(calc(var(--dir) * 42cqw), -3cqw) scale(1); }
+  }
+  @keyframes press { 0%, 22% { opacity: 0; transform: scale(0); } 32% { opacity: 1; transform: scale(1); } 78% { opacity: 0.8; } 100% { opacity: 0; transform: scale(1.3); } }
 
 
   /* ---------------- Steps: sticky phone on the left, the steps scroll past ---------------- */
@@ -287,13 +308,15 @@
   .tile p { margin: 0; color: var(--ink-soft); max-width: 30ch; }
   .tile .icon { width: 28px; height: 28px; color: var(--teal); margin-bottom: 18px; }
   .tile.streak { grid-row: span 2; display: flex; flex-direction: column; padding-bottom: 0; }
-  .tile.streak .crop { margin: 32px auto 0; width: min(300px, 90%); border-radius: 40px 40px 0 0; overflow: hidden; flex: 1; min-height: 360px;
+  .tile.streak .crop { margin: 32px auto 0; width: min(300px, 90%); border-radius: 40px 40px 0 0; overflow: hidden; flex: 1; min-height: 0;
                        box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18); }
-  .tile.streak .crop img { width: 100%; object-fit: cover; object-position: top; }
+  /* Taken out of the flow so the screenshot's own height can't stretch the tile; it fills whatever the tile has left. */
+  .tile.streak .crop { position: relative; }
+  .tile.streak .crop img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
   .tile.flip { display: flex; flex-direction: column; padding-right: 0; padding-bottom: 0; }
-  .tile.flip p { padding-right: 32px; }
+  .tile.flip p { padding-right: 32px; margin-bottom: 26px; }
   /* Only the flipped card from the screenshot, running off the tile's corner. */
-  .tile.flip .peek { margin: 26px 0 0 14%; flex: 1; min-height: 210px; border-radius: 22px 0 0 0; overflow: hidden; box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18); }
+  .tile.flip .peek { margin: auto 0 0 14%; height: 230px; flex: none; border-radius: 22px 0 0 0; overflow: hidden; box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18); }
   .tile.flip .peek img { width: 100%; height: 100%; object-fit: cover; object-position: 0 30%; }
   .tile.private h3, .tile.private p { padding-right: 104px; }
   .vault {
@@ -341,10 +364,12 @@
     .aura::after { animation: drift 24s ease-in-out infinite alternate-reverse; }
     .orb, .last .big-orb, .vault { animation: breathe 4s ease-in-out infinite; }
     .hero .phone { animation: float 7s ease-in-out infinite; }
+    @media (max-width: 860px) { .hero .phone { animation-name: float-flat; } }
   }
   @keyframes drift { to { transform: translate(-8vmax, 6vmax) scale(1.08); } }
   @keyframes breathe { 50% { box-shadow: 0 0 70px rgb(134 227 207 / 0.7), 0 0 18px rgb(102 205 188 / 0.6); } }
   @keyframes float { 50% { transform: rotate(2deg) translateY(-12px); } }
+  @keyframes float-flat { 50% { transform: translateY(-8px); } }
   @media (prefers-reduced-motion: reduce) {
     .js .reveal, .js .hero h1 .w { opacity: 1; transform: none; transition: none; }
     .phone > img, .step h3, .step p { transition: none; }
@@ -353,15 +378,23 @@
   /* ---------------- Phones and small tablets: one column ---------------- */
 
   @media (max-width: 860px) {
-    .hero { grid-template-columns: 1fr; min-height: 0; gap: 56px; padding-top: 16px; }
-    .hero .sub { max-width: none; }
-    /* Side by side the phones get too narrow to read or swipe, so they stack. */
-    .duo { flex-direction: column; align-items: center; margin-top: 44px; gap: 40px; }
-    .duo .phone { width: min(290px, 76vw); }
+    section { padding: 64px 0; }
+    .hero { grid-template-columns: 1fr; min-height: 0; gap: 44px; padding: 12px 0 24px; }
+    .hero .sub { max-width: none; margin-bottom: 26px; }
+    /* Phones at a size you can take in at a glance, not a whole screen each. */
+    .phone { width: min(250px, 66vw); border-radius: 36px; }
+    .hero .phone { transform: none; }
+    /* Side by side they get too narrow to read or swipe, so they stack. */
+    .duo { flex-direction: column; align-items: center; margin-top: 36px; gap: 32px; }
+    .duo .phone { width: min(250px, 66vw); }
+    .daily .hint { margin-top: 16px; }
     .steps { grid-template-columns: 1fr; gap: 0; }
     .steps .stage { display: none; }
-    .step { min-height: 0; padding: 40px 0; max-width: none; }
-    .step .shot { display: block; position: relative; width: min(260px, 72vw); margin: 28px auto 0; }
+    .step { min-height: 0; padding: 32px 0 8px; max-width: none; }
+    .step .shot { display: block; position: relative; width: min(220px, 58vw); margin: 24px auto 0; }
+    .truth blockquote { margin-bottom: 20px; }
+    .tile.streak .crop { flex: none; height: 400px; }
+    .tile.streak .crop img { object-position: 50% 55%; }
     .js .step:not(.on) h3, .js .step:not(.on) p { opacity: 1; }
     .bento { grid-template-columns: 1fr; }
     .tile.streak { grid-row: auto; }
@@ -371,9 +404,13 @@
     .tile.private h3, .tile.private p { padding-right: 74px; }
   }
   @media (max-width: 420px) {
-    .signup form { flex-direction: column; border-radius: 28px; }
-    .signup input { padding: 14px 16px; }
-    .signup button { padding: 16px; }
+    /* Field and button as two full-width pills instead of one squeezed row. */
+    .signup form { flex-direction: column; gap: 10px; padding: 0; background: none; border: 0; border-radius: 0; }
+    .signup form:focus-within { box-shadow: none; }
+    .signup input { padding: 15px 20px; border-radius: 999px; background: rgb(15 38 34 / 0.85); border: 1px solid var(--line); }
+    .signup input:focus { border-color: var(--accent); }
+    .signup button { padding: 17px; }
+    .signup .fine, .signup .error { margin-left: 0; text-align: center; }
     .tile { padding: 26px; }
   }
 </style>
@@ -417,6 +454,7 @@
       <div class="phone feed">
         <img src="/img/en-feed.webp" data-de-src="/img/de-feed.webp" alt="" loading="lazy">
         <div class="deck" tabindex="0" role="button" aria-label="Next affirmation" data-de-aria="Nächste Affirmation"></div>
+        <div class="finger" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,104v50.93c0,46.2-36.85,84.55-83,85.06A83.71,83.71,0,0,1,80.6,215.4C58.79,192.33,34.15,136,34.15,136a16,16,0,0,1,6.53-22.23c7.66-4,17.1-.84,21.4,6.62l21,36.44a6.09,6.09,0,0,0,6,3.09l.12,0A8.19,8.19,0,0,0,96,151.74V32a16,16,0,0,1,16.77-16c8.61.4,15.23,7.82,15.23,16.43V104a8,8,0,0,0,8.53,8,8.17,8.17,0,0,0,7.47-8.25V88a16,16,0,0,1,16.77-16c8.61.4,15.23,7.82,15.23,16.43V112a8,8,0,0,0,8.53,8,8.17,8.17,0,0,0,7.47-8.25v-7.28c0-8.61,6.62-16,15.23-16.43A16,16,0,0,1,224,104Z"/></svg></div>
       </div>
     </div>
     <p class="hint" data-de="Probier es: Wisch die Karten weg.">Try it: swipe the cards away.</p>
@@ -661,7 +699,7 @@
     var x0, y0, t0, dx = 0, dy = 0, live = false;
     card.addEventListener("pointerdown", function (e) {
       if (stack[0] !== card) return;
-      live = true; touched = true; x0 = e.clientX; y0 = e.clientY; t0 = performance.now(); dx = dy = 0;
+      live = true; touched = true; finger.classList.remove("go"); x0 = e.clientX; y0 = e.clientY; t0 = performance.now(); dx = dy = 0;
       card.setPointerCapture(e.pointerId);
       card.style.transition = "none";
     });
@@ -685,11 +723,24 @@
     e.preventDefault(); touched = true;
     fling(stack[0], e.key === "ArrowLeft" ? -1 : 1);
   });
-  // Until someone swipes, the deck shows that it can be swiped.
-  var demo = null, side = 1;
+  // Until someone swipes, a finger shows how: it presses on the card, pulls it aside, and the card flies off.
+  var finger = document.querySelector(".finger"), demo = null, side = 1;
+  function show() {
+    if (touched) return;
+    side = -side;
+    var card = stack[0];
+    finger.style.setProperty("--dir", side);
+    finger.classList.remove("go"); finger.offsetWidth; finger.classList.add("go");
+    setTimeout(function () {
+      if (touched || stack[0] !== card) return;
+      card.style.transition = "transform 0.6s cubic-bezier(0.45, 0, 0.25, 1)";
+      card.style.transform = "translate(" + side * 26 + "%, -1%) rotate(" + side * 5 + "deg)";
+    }, 380);
+    setTimeout(function () { if (!touched && stack[0] === card) fling(card, side); }, 980);
+  }
   if (!reduce) new IntersectionObserver(function (entries) {
     clearInterval(demo);
-    if (entries[0].isIntersecting) demo = setInterval(function () { if (!touched) fling(stack[0], side = -side); }, 3400);
+    if (entries[0].isIntersecting) { setTimeout(show, 600); demo = setInterval(show, 3800); }
   }, { threshold: 0.6 }).observe(deck);
 
   // ---------------- Every day: reminders keep arriving on the lock screen ----------------
@@ -708,7 +759,7 @@
       n.style.opacity = i < 3 ? "1" : "0";
       n.style.transform = "translateY(" + y + "px)" + (i < 3 ? "" : " scale(0.94)");
       if (i < 3) n.querySelector("time").textContent = times[i];
-      y += n.offsetHeight + 8;
+      y += n.offsetHeight + notesBox.offsetWidth * 0.03;
     });
     notes.slice(3).forEach(function (n) { setTimeout(function () { n.remove(); }, 600); });
     notes = notes.slice(0, 3);
