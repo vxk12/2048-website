@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Emba — Datenschutz &amp; Support</title>
-<meta name="description" content="Datenschutz, Nutzungsbedingungen, Impressum und Support für die iOS-App Emba von Viktor Rotgang.">
+<title>Emba — Privacy &amp; Support</title>
+<meta name="description" content="Privacy policy, terms of use, imprint and support for Emba, the iOS app by Viktor Rotgang.">
 <meta name="color-scheme" content="dark light">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><radialGradient id='g' cx='35%25' cy='30%25' r='75%25'><stop offset='0' stop-color='%23F0FDF9'/><stop offset='.45' stop-color='%2386E3CF'/><stop offset='1' stop-color='%2335736A'/></radialGradient></defs><rect width='32' height='32' rx='7' fill='%23112C2B'/><circle cx='16' cy='16' r='10' fill='url(%23g)'/></svg>">
 </head>
@@ -215,13 +215,13 @@
     <div class="wordmark">Emba</div>
     <div class="spacer"></div>
     <div class="langbar" role="group" aria-label="Sprache / Language">
-      <button type="button" data-switch="de" aria-pressed="true">Deutsch</button>
-      <button type="button" data-switch="en" aria-pressed="false">English</button>
+      <button type="button" data-switch="en" aria-pressed="true">English</button>
+      <button type="button" data-switch="de" aria-pressed="false">Deutsch</button>
     </div>
   </header>
 
   <!-- ============================ DEUTSCH ============================ -->
-  <div class="lang" data-lang="de" lang="de">
+  <div class="lang" data-lang="de" lang="de" hidden>
 
     <nav aria-label="Abschnitte">
       <a class="is-primary" href="#de-datenschutz">Datenschutz</a>
@@ -328,7 +328,7 @@
   </div>
 
   <!-- ============================ ENGLISH ============================ -->
-  <div class="lang" data-lang="en" lang="en" hidden>
+  <div class="lang" data-lang="en" lang="en">
 
     <nav aria-label="Sections">
       <a class="is-primary" href="#en-privacy">Privacy Policy</a>
@@ -442,11 +442,10 @@
 </div>
 
 <script>
-  // Deutsch oder Englisch: nach dem Link aus der App (#de-… / #en-…), sonst nach der Browsersprache.
+  // Englisch, außer der Link aus der App sagt Deutsch (#de-…).
   (function () {
     var hash = location.hash.slice(1);
-    var initial = /^(de|en)-/.test(hash) ? hash.slice(0, 2)
-      : (navigator.language || "de").toLowerCase().indexOf("de") === 0 ? "de" : "en";
+    var initial = /^(de|en)-/.test(hash) ? hash.slice(0, 2) : "en";
 
     function show(lang) {
       document.querySelectorAll(".lang[data-lang]").forEach(function (el) {
