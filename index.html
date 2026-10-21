@@ -11,7 +11,7 @@
 <meta property="og:image" content="https://www.getemba.app/img/en-bingo.webp">
 <link rel="icon" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
-<link rel="preload" as="image" href="/img/en-intercept.webp">
+<link rel="preload" as="image" href="/img/en-speak.webp">
 <script>
   // Old links from the App Store and the app point at /#en-privacy and the like. The hash never
   // reaches the server, so the forwarding has to happen here, before anything renders.
@@ -154,9 +154,50 @@
   }
   .phone > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.7s var(--ease); }
   .hero .phone { transform: rotate(2deg); }
-  .hero .phone .after { opacity: 0; }
-  .hero .phone.said .after { opacity: 1; }
-  .hero .phone.said .before { opacity: 0; }
+
+  /* ---------------- Hero phone: Emba listens while you say your belief ----------------
+     The screen is the app's own, with the belief and the button painted out; both are drawn here so they can move.
+     Positions are fractions of the 1320 x 2868 screenshot, sizes in cqw (1% of the phone's width). */
+  .phone { container-type: inline-size; }
+  .speak .after { opacity: 0; }
+  .speak.said .after { opacity: 1; }
+  .speak .belief {
+    position: absolute; left: 3%; right: 3%; top: 55.56%; margin: 0; text-align: center;
+    font-family: var(--serif); font-size: 7.18cqw; line-height: 9.1cqw; color: rgb(240 253 249 / 0.24);
+    transition: opacity 0.6s var(--ease);
+  }
+  .speak .belief span { transition: color 0.35s, text-shadow 0.8s; }
+  .speak .belief span.lit { color: #F0FDF9; text-shadow: 0 0 4cqw rgb(134 227 207 / 0.55); }
+  .speak.said .belief { opacity: 0; }
+  .speak .glow {
+    position: absolute; left: 50%; top: 41.3%; width: 44cqw; aspect-ratio: 1; margin: -22cqw 0 0 -22cqw; border-radius: 50%;
+    background: radial-gradient(circle, rgb(169 238 220 / 0.55), rgb(91 194 176 / 0.28) 42%, transparent 68%);
+    mix-blend-mode: screen; opacity: 0; transition: opacity 0.5s;
+  }
+  .speak.listening .glow { opacity: 1; animation: voice 0.9s ease-in-out infinite; }
+  .speak.said .glow { opacity: 0; }
+  @keyframes voice { 0%, 100% { transform: scale(0.92); } 22% { transform: scale(1.08); } 48% { transform: scale(0.97); } 74% { transform: scale(1.13); } }
+  .speak .bar {
+    position: absolute; left: 5.5%; right: 5.5%; top: 89%; height: 6.1%; display: flex; align-items: center; justify-content: center;
+    gap: 1.6cqw; font: 600 4.3cqw/1 var(--sans); color: #E6F5F1; transition: opacity 0.3s;
+  }
+  .speak .bar svg { width: 4.4cqw; height: 4.4cqw; }
+  .speak.listening .bar, .speak.said .bar { opacity: 0; }
+  /* What the app heard: the box takes over the bottom, matching words fly up into the belief. */
+  .speak .heard {
+    position: absolute; left: 0; right: 0; top: 80%; bottom: 0; display: flex; align-items: flex-end; padding: 0 6% 5.5%;
+    background: linear-gradient(to bottom, rgb(8 16 15 / 0), #08100F 14%, #040C0B);
+    opacity: 0; transform: translateY(3cqw); transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
+  }
+  .speak.listening .heard { opacity: 1; transform: none; }
+  .speak.said .heard { opacity: 0; }
+  .speak .box {
+    flex: 1; min-height: 19cqw; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 1.2cqw 1.5cqw;
+    padding: 4cqw; border-radius: 6cqw; background: rgb(34 52 49 / 0.7); border: 1px solid rgb(255 255 255 / 0.07);
+    font: 500 4.4cqw/1.2 var(--sans); color: #F0FDF9;
+  }
+  .speak .box:empty::before { content: attr(data-label); color: rgb(134 227 207 / 0.7); }
+  .speak .box span { display: inline-block; transform-origin: 0 0; }
 
   /* ---------------- Every day: reminders on the lock screen, the feed in the app ---------------- */
 
@@ -164,7 +205,28 @@
   .daily > p { color: var(--ink-soft); font-size: 1.12rem; max-width: 44ch; margin: 0 auto; }
   .duo { display: flex; justify-content: center; align-items: flex-start; gap: clamp(20px, 5vw, 72px); margin-top: 64px; }
   .duo .phone { margin: 0; width: min(290px, 44vw); }
-  .duo .feed { margin-top: 80px; }
+  .daily .hint { margin-top: 28px; font-size: 0.9rem; color: var(--ink-faint); }
+
+  /* The feed: real cards you can swipe away, five that come round again. */
+  .deck { position: absolute; left: 6.1%; right: 6.1%; top: 22.4%; height: 58.6%; touch-action: pan-y; outline: none; }
+  .deck:focus-visible { outline: 2px solid var(--teal); outline-offset: 6px; border-radius: 7cqw; }
+  .card {
+    position: absolute; inset: 0; display: flex; flex-direction: column; padding: 5.5cqw; border-radius: 7cqw;
+    background: linear-gradient(170deg, #2E615A, #1F453F 80%);
+    box-shadow: inset 0 0 0 1px rgb(134 227 207 / 0.14), 0 3cqw 8cqw rgb(0 0 0 / 0.35);
+    transform: translateY(calc(var(--i) * 3.4cqw)) scale(calc(1 - var(--i) * 0.05));
+    z-index: calc(10 - var(--i)); opacity: calc(1 - var(--i) * 0.35);
+    transition: transform 0.45s var(--ease), opacity 0.45s var(--ease);
+    color: #F0FDF9; cursor: grab; user-select: none; -webkit-user-select: none;
+  }
+  .card.gone { opacity: 0; }
+  .card:active { cursor: grabbing; }
+  .card .tag { display: flex; align-items: center; gap: 1.4cqw; font: 600 3.5cqw/1 var(--sans); color: #A9EEDC; }
+  .card .tag svg { width: 3.8cqw; height: 3.8cqw; }
+  .card p { margin: auto 0; text-align: center; font-family: var(--serif); font-size: 6.8cqw; line-height: 1.25; text-wrap: balance; }
+  .card .acts { display: flex; justify-content: space-between; }
+  .card .acts span { width: 9.5cqw; height: 9.5cqw; border-radius: 50%; display: grid; place-items: center; background: rgb(0 0 0 / 0.22); }
+  .card .acts svg { width: 4.6cqw; height: 4.6cqw; }
   /* Notifications are live elements so they can arrive one after another, like they do during the day. */
   .notes { position: absolute; left: 4.5%; right: 4.5%; top: 47%; }
   .note {
@@ -228,10 +290,26 @@
   .tile.streak .crop { margin: 32px auto 0; width: min(300px, 90%); border-radius: 40px 40px 0 0; overflow: hidden; flex: 1; min-height: 360px;
                        box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18); }
   .tile.streak .crop img { width: 100%; object-fit: cover; object-position: top; }
-  .tile.flip { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; align-items: center; padding-right: 0; padding-bottom: 0; }
-  /* Only the card from the screenshot, cut so it runs off the tile's edge. */
-  .tile.flip img { border-radius: 22px 0 0 0; align-self: end; width: 100%; height: 280px; object-fit: cover; object-position: 0 22%;
-                   box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18); }
+  .tile.flip { display: flex; flex-direction: column; padding-right: 0; padding-bottom: 0; }
+  .tile.flip p { padding-right: 32px; }
+  /* Only the flipped card from the screenshot, running off the tile's corner. */
+  .tile.flip .peek { margin: 26px 0 0 14%; flex: 1; min-height: 210px; border-radius: 22px 0 0 0; overflow: hidden; box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18); }
+  .tile.flip .peek img { width: 100%; height: 100%; object-fit: cover; object-position: 0 30%; }
+  .tile.private h3, .tile.private p { padding-right: 104px; }
+  .vault {
+    position: absolute; right: 30px; top: 30px; width: 84px; aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center;
+    background:
+      radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.9) 0 7%, transparent 18%),
+      radial-gradient(circle at 36% 30%, #F0FDF9, #A9EEDC 30%, #66CDBC 58%, #35736A 92%);
+    box-shadow: 0 0 40px rgb(134 227 207 / 0.45); color: #0B2A25;
+  }
+  .vault svg { width: 34px; height: 34px; }
+  .pills { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; }
+  .pills li {
+    display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
+    color: var(--teal); background: rgb(91 194 176 / 0.1); border: 1px solid rgb(134 227 207 / 0.2);
+  }
+  .pills svg { width: 15px; height: 15px; }
   .tile.private { background: radial-gradient(circle at 85% 15%, rgb(91 194 176 / 0.28), transparent 55%), var(--raised); }
 
   /* ---------------- Last call ---------------- */
@@ -261,7 +339,7 @@
   @media (prefers-reduced-motion: no-preference) {
     .aura::before { animation: drift 18s ease-in-out infinite alternate; }
     .aura::after { animation: drift 24s ease-in-out infinite alternate-reverse; }
-    .orb, .last .big-orb { animation: breathe 4s ease-in-out infinite; }
+    .orb, .last .big-orb, .vault { animation: breathe 4s ease-in-out infinite; }
     .hero .phone { animation: float 7s ease-in-out infinite; }
   }
   @keyframes drift { to { transform: translate(-8vmax, 6vmax) scale(1.08); } }
@@ -277,14 +355,9 @@
   @media (max-width: 860px) {
     .hero { grid-template-columns: 1fr; min-height: 0; gap: 56px; padding-top: 16px; }
     .hero .sub { max-width: none; }
-    /* Side by side the phones get too narrow for the notifications, so the feed tucks in behind the lock screen. */
-    .duo { margin-top: 44px; gap: 0; }
-    .duo .lock { width: min(250px, 64vw); z-index: 1; }
-    .duo .feed { width: min(210px, 52vw); margin: 70px 0 0 -14vw; }
-    .note { padding: 8px 9px; border-radius: 14px; gap: 7px; }
-    .note img { width: 22px; height: 22px; border-radius: 6px; }
-    .note div { font-size: 10.5px; }
-    .note time { font-size: 9.5px; }
+    /* Side by side the phones get too narrow to read or swipe, so they stack. */
+    .duo { flex-direction: column; align-items: center; margin-top: 44px; gap: 40px; }
+    .duo .phone { width: min(290px, 76vw); }
     .steps { grid-template-columns: 1fr; gap: 0; }
     .steps .stage { display: none; }
     .step { min-height: 0; padding: 40px 0; max-width: none; }
@@ -292,8 +365,10 @@
     .js .step:not(.on) h3, .js .step:not(.on) p { opacity: 1; }
     .bento { grid-template-columns: 1fr; }
     .tile.streak { grid-row: auto; }
-    .tile.flip { grid-template-columns: 1fr; padding-right: 26px; }
-    .tile.flip img { border-radius: 22px 22px 0 0; height: 240px; }
+    .tile.flip .peek { margin-left: 10%; }
+    .vault { width: 64px; right: 22px; top: 22px; }
+    .vault svg { width: 26px; height: 26px; }
+    .tile.private h3, .tile.private p { padding-right: 74px; }
   }
   @media (max-width: 420px) {
     .signup form { flex-direction: column; border-radius: 28px; }
@@ -321,8 +396,12 @@
       <p class="sub" data-de="Emba zeigt dir jeden Tag deine eigenen Glaubenssätze und lässt dich einen laut sagen, bevor sich Instagram oder TikTok öffnet.">Emba shows you your own beliefs every day and asks you to say one out loud before Instagram or TikTok opens.</p>
       <div class="signup"></div>
     </div>
-    <div class="phone" aria-hidden="true">
-      <img class="before" src="/img/en-intercept.webp" data-de-src="/img/de-intercept.webp" alt="">
+    <div class="phone speak" aria-hidden="true">
+      <img src="/img/en-speak.webp" data-de-src="/img/de-speak.webp" alt="">
+      <div class="glow"></div>
+      <p class="belief"></p>
+      <div class="bar"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Zm40,143.6V240a8,8,0,0,1-16,0V207.6A80.11,80.11,0,0,1,48,128a8,8,0,0,1,16,0,64,64,0,0,0,128,0,8,8,0,0,1,16,0A80.11,80.11,0,0,1,136,207.6Z"/></svg><span data-de="Tippen und sprechen">Tap and speak</span></div>
+      <div class="heard"><div class="box" data-label="Listening …" data-de-label="Ich höre zu …"></div></div>
       <img class="after" src="/img/en-bingo.webp" data-de-src="/img/de-bingo.webp" alt="">
     </div>
   </div>
@@ -336,9 +415,11 @@
         <div class="notes"></div>
       </div>
       <div class="phone feed">
-        <img src="/img/en-home.webp" data-de-src="/img/de-home.webp" alt="The Emba feed with an affirmation card" data-de-alt="Der Feed in Emba mit einer Affirmationskarte" loading="lazy">
+        <img src="/img/en-feed.webp" data-de-src="/img/de-feed.webp" alt="" loading="lazy">
+        <div class="deck" tabindex="0" role="button" aria-label="Next affirmation" data-de-aria="Nächste Affirmation"></div>
       </div>
     </div>
+    <p class="hint" data-de="Probier es: Wisch die Karten weg.">Try it: swipe the cards away.</p>
   </section>
 
   <section class="wrap steps" aria-labelledby="how">
@@ -387,16 +468,20 @@
       <div class="crop"><img src="/img/en-streak.webp" data-de-src="/img/de-streak.webp" alt="A six day streak in Emba" data-de-alt="Eine Serie von sechs Tagen in Emba" loading="lazy"></div>
     </div>
     <div class="tile flip reveal">
-      <div>
-        <h3 data-de="Wisse, warum">Know why it works</h3>
-        <p data-de="Dreh eine Karte um und lies die Idee hinter jedem Satz.">Flip a card to read the idea behind every sentence.</p>
-      </div>
-      <img src="/img/en-flip.webp" data-de-src="/img/de-flip.webp" alt="The back of an affirmation card explaining it" data-de-alt="Die Rückseite einer Karte mit der Erklärung" loading="lazy">
+      <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64ZM160,88h40a8,8,0,0,1,0,16H160a8,8,0,0,1,0-16Zm48,40a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h40A8,8,0,0,1,208,128Zm0,32a8,8,0,0,1-8,8H160a8,8,0,0,1,0-16h40A8,8,0,0,1,208,160Z"/></svg>
+      <h3 data-de="Wisse, warum">Know why it works</h3>
+      <p data-de="Dreh eine Karte um und lies die Idee hinter jedem Satz.">Flip a card to read the idea behind every sentence.</p>
+      <div class="peek"><img src="/img/en-flip.webp" data-de-src="/img/de-flip.webp" alt="The back of an affirmation card explaining it" data-de-alt="Die Rückseite einer Karte mit der Erklärung" loading="lazy"></div>
     </div>
     <div class="tile private reveal">
-      <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg>
+      <div class="vault" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg></div>
       <h3 data-de="Bleibt auf deinem iPhone">Stays on your iPhone</h3>
       <p data-de="Kein Konto, kein Server. Deine Glaubenssätze verlassen dein Handy nie.">No account, no server. Your beliefs never leave your phone.</p>
+      <ul class="pills">
+        <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg><span data-de="Kein Konto">No account</span></li>
+        <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg><span data-de="Kein Tracking">No tracking</span></li>
+        <li><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg><span data-de="Keine Werbung">No ads</span></li>
+      </ul>
     </div>
   </section>
 
@@ -465,7 +550,7 @@
       if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
       el.innerHTML = next === "de" ? el.dataset.de : el.dataset.en;
     });
-    [["src", "deSrc"], ["alt", "deAlt"], ["href", "deHref"], ["placeholder", "dePlaceholder"], ["aria-label", "deAria"]].forEach(function (pair) {
+    [["src", "deSrc"], ["alt", "deAlt"], ["href", "deHref"], ["placeholder", "dePlaceholder"], ["aria-label", "deAria"], ["data-label", "deLabel"]].forEach(function (pair) {
       document.querySelectorAll("[data-" + pair[1].replace(/[A-Z]/g, function (c) { return "-" + c.toLowerCase(); }) + "]").forEach(function (el) {
         var key = "en" + pair[1].slice(2);
         if (el.dataset[key] === undefined) el.dataset[key] = el.getAttribute(pair[0]);
@@ -475,6 +560,8 @@
     document.querySelectorAll(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.set === next)); });
     lightUp();
     resetNotes();
+    buildDeck();
+    listen();
   }
   document.querySelectorAll(".lang button").forEach(function (b) {
     b.addEventListener("click", function () { if (b.dataset.set !== lang) setLang(b.dataset.set); });
@@ -493,10 +580,117 @@
     });
   }
 
-  // The hero phone plays the moment itself: Emba asks, you say it, the check appears. Then again.
-  var heroPhone = document.querySelector(".hero .phone");
-  if (reduce) heroPhone.classList.add("said");
-  else setInterval(function () { heroPhone.classList.toggle("said"); }, 2800);
+  // ---------------- Hero phone: tap, speak, the words fly up and light, "Great!". Then again. ----------------
+  var BELIEF = { en: ["Every day brings me", "closer to my goal."], de: ["Jeder Tag bringt mich", "meinem Ziel näher."] };
+  var speak = document.querySelector(".speak"), belief = speak.querySelector(".belief"), heardBox = speak.querySelector(".box"), run = 0;
+  function pause(ms, id) {
+    return new Promise(function (ok, stop) { setTimeout(function () { id === run ? ok() : stop(); }, ms); });
+  }
+  function listen() {
+    var id = ++run;
+    speak.classList.remove("listening", "said");
+    belief.innerHTML = BELIEF[lang].map(function (line) {
+      return line.split(" ").map(function (w) { return "<span>" + w + "</span>"; }).join(" ");
+    }).join("<br>");
+    heardBox.innerHTML = "";
+    if (reduce) { belief.querySelectorAll("span").forEach(function (w) { w.classList.add("lit"); }); speak.classList.add("said"); return; }
+    var words = belief.querySelectorAll("span"), i = 0;
+    pause(1200, id)
+      .then(function () { speak.classList.add("listening"); return pause(800, id); })
+      .then(function next() {
+        if (i === words.length) return pause(600, id);
+        var target = words[i++], heard = document.createElement("span");
+        heard.textContent = target.textContent;
+        heardBox.appendChild(heard);
+        return pause(240, id).then(function () { flyUp(heard, target); return pause(160, id); }).then(next);
+      })
+      .then(function () { speak.classList.add("said"); return pause(2800, id); })
+      .then(function () { speak.classList.remove("said"); return pause(700, id); })
+      .then(listen, function () {});
+  }
+  // The heard word travels from the box to its place in the belief, then that word lights up.
+  function flyUp(from, to) {
+    var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
+    from.animate([{ transform: "none" }, { transform: "translate(" + (b.left - a.left) + "px," + (b.top - a.top) + "px) scale(" + b.height / a.height + ")", opacity: 0.4 }],
+                 { duration: 520, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "forwards" });
+    // A timer rather than onfinish: it keeps the belief in step with the voice even when frames are skipped.
+    setTimeout(function () { from.style.visibility = "hidden"; to.classList.add("lit"); }, 520);
+  }
+
+  // ---------------- Feed: five cards to swipe away, they come round again ----------------
+  var CARDS = [
+    ["arrow-up-right", "Success", "Erfolg", "I reach my goals step by step.", "Ich erreiche meine Ziele Schritt für Schritt."],
+    ["heart", "Self-Love", "Selbstliebe", "I am enough, just as I am.", "Ich bin genug, so wie ich bin."],
+    ["target", "Focus", "Fokus", "I scroll less and experience more.", "Ich scrolle weniger und erlebe mehr."],
+    ["flame", "Self-Confidence", "Selbstvertrauen", "I am stronger than I think.", "Ich bin stärker, als ich denke."],
+    ["moon", "Inner Peace", "Innere Ruhe", "I let worries drift by like clouds.", "Ich lasse Sorgen ziehen wie Wolken."]
+  ];
+  var ICONS = {"arrow-up-right": "<path d=\"M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z\"/>", "heart": "<path d=\"M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z\"/>", "target": "<path d=\"M221.87,83.16A104.1,104.1,0,1,1,195.67,49l22.67-22.68a8,8,0,0,1,11.32,11.32l-96,96a8,8,0,0,1-11.32-11.32l27.72-27.72a40,40,0,1,0,17.87,31.09,8,8,0,1,1,16-.9,56,56,0,1,1-22.38-41.65L184.3,60.39a87.88,87.88,0,1,0,23.13,29.67,8,8,0,0,1,14.44-6.9Z\"/>", "flame": "<path d=\"M173.79,51.48a221.25,221.25,0,0,0-41.67-34.34,8,8,0,0,0-8.24,0A221.25,221.25,0,0,0,82.21,51.48C54.59,80.48,40,112.47,40,144a88,88,0,0,0,176,0C216,112.47,201.41,80.48,173.79,51.48ZM96,184c0-27.67,22.53-47.28,32-54.3,9.48,7,32,26.63,32,54.3a32,32,0,0,1-64,0Zm77.27,15.93A47.8,47.8,0,0,0,176,184c0-44-42.09-69.79-43.88-70.86a8,8,0,0,0-8.24,0C122.09,114.21,80,140,80,184a47.8,47.8,0,0,0,2.73,15.93A71.88,71.88,0,0,1,56,144c0-34.41,20.4-63.15,37.52-81.19A216.21,216.21,0,0,1,128,33.54a215.77,215.77,0,0,1,34.48,29.27C193.49,95.5,200,125,200,144A71.88,71.88,0,0,1,173.27,199.93Z\"/>", "moon": "<path d=\"M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z\"/>", "export": "<path d=\"M216,112v96a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V112A16,16,0,0,1,56,96H80a8,8,0,0,1,0,16H56v96H200V112H176a8,8,0,0,1,0-16h24A16,16,0,0,1,216,112ZM93.66,69.66,120,43.31V136a8,8,0,0,0,16,0V43.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40A8,8,0,0,0,93.66,69.66Z\"/>"};
+  function icon(name) { return '<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">' + ICONS[name] + "</svg>"; }
+  var deck = document.querySelector(".deck"), stack = [], touched = false;
+  function restack() { stack.forEach(function (c, i) { c.style.setProperty("--i", Math.min(i, 3)); c.classList.toggle("gone", i > 2); }); }
+  function buildDeck() {
+    deck.innerHTML = "";
+    stack = CARDS.map(function (c) {
+      var el = document.createElement("div");
+      el.className = "card";
+      el.innerHTML = '<div class="tag">' + icon(c[0]) + "<span></span></div><p></p>" +
+        '<div class="acts"><span>' + icon("heart") + "</span><span>" + icon("export") + "</span></div>";
+      el.querySelector(".tag span").textContent = lang === "de" ? c[2] : c[1];
+      el.querySelector("p").textContent = lang === "de" ? c[4] : c[3];
+      deck.appendChild(el);
+      drag(el);
+      return el;
+    });
+    restack();
+  }
+  function fling(card, dir, dy) {
+    card.style.transition = "";
+    card.style.transform = "translate(" + dir * 140 + "%," + (dy || 0) + "px) rotate(" + dir * 16 + "deg)";
+    card.style.opacity = "0";
+    stack.push(stack.shift());
+    restack();
+    setTimeout(function () {
+      card.style.transition = "none";
+      card.style.transform = ""; card.style.opacity = "";
+      card.offsetHeight;
+      card.style.transition = "";
+    }, 460);
+  }
+  function drag(card) {
+    var x0, y0, t0, dx = 0, dy = 0, live = false;
+    card.addEventListener("pointerdown", function (e) {
+      if (stack[0] !== card) return;
+      live = true; touched = true; x0 = e.clientX; y0 = e.clientY; t0 = performance.now(); dx = dy = 0;
+      card.setPointerCapture(e.pointerId);
+      card.style.transition = "none";
+    });
+    card.addEventListener("pointermove", function (e) {
+      if (!live) return;
+      dx = e.clientX - x0; dy = (e.clientY - y0) * 0.4;
+      card.style.transform = "translate(" + dx + "px," + dy + "px) rotate(" + dx * 0.06 + "deg)";
+    });
+    function end() {
+      if (!live) return;
+      live = false;
+      var speed = Math.abs(dx) / Math.max(performance.now() - t0, 1);
+      if (Math.abs(dx) > card.offsetWidth * 0.28 || (speed > 0.45 && Math.abs(dx) > 12)) fling(card, dx < 0 ? -1 : 1, dy);
+      else { card.style.transition = ""; card.style.transform = ""; }
+    }
+    card.addEventListener("pointerup", end);
+    card.addEventListener("pointercancel", end);
+  }
+  deck.addEventListener("keydown", function (e) {
+    if (["ArrowLeft", "ArrowRight", "Enter", " "].indexOf(e.key) < 0) return;
+    e.preventDefault(); touched = true;
+    fling(stack[0], e.key === "ArrowLeft" ? -1 : 1);
+  });
+  // Until someone swipes, the deck shows that it can be swiped.
+  var demo = null, side = 1;
+  if (!reduce) new IntersectionObserver(function (entries) {
+    clearInterval(demo);
+    if (entries[0].isIntersecting) demo = setInterval(function () { if (!touched) fling(stack[0], side = -side); }, 3400);
+  }, { threshold: 0.6 }).observe(deck);
 
   // ---------------- Every day: reminders keep arriving on the lock screen ----------------
   var BELIEFS = {
