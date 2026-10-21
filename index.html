@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Emba: say it before you scroll</title>
-<meta name="description" content="Emba asks you to say your own affirmation out loud before Instagram or TikTok opens. Join the waitlist.">
+<meta name="description" content="Emba shows you your own beliefs every day and asks you to say one out loud before Instagram or TikTok opens. Join the waitlist.">
 <meta name="theme-color" content="#071512">
 <meta property="og:title" content="Emba: say it before you scroll">
 <meta property="og:description" content="Say your own affirmation out loud before Instagram or TikTok opens. Coming soon to the App Store.">
@@ -152,11 +152,32 @@
     box-shadow: 0 0 0 1px rgb(134 227 207 / 0.18), 0 0 0 9px #0C1F1B, 0 0 0 10px rgb(134 227 207 / 0.12),
                 0 40px 90px -20px rgb(0 0 0 / 0.7), 0 0 120px -30px rgb(91 194 176 / 0.45);
   }
-  .phone img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.7s var(--ease); }
+  .phone > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.7s var(--ease); }
   .hero .phone { transform: rotate(2deg); }
   .hero .phone .after { opacity: 0; }
   .hero .phone.said .after { opacity: 1; }
   .hero .phone.said .before { opacity: 0; }
+
+  /* ---------------- Every day: reminders on the lock screen, the feed in the app ---------------- */
+
+  .daily { text-align: center; }
+  .daily > p { color: var(--ink-soft); font-size: 1.12rem; max-width: 44ch; margin: 0 auto; }
+  .duo { display: flex; justify-content: center; align-items: flex-start; gap: clamp(20px, 5vw, 72px); margin-top: 64px; }
+  .duo .phone { margin: 0; width: min(290px, 44vw); }
+  .duo .feed { margin-top: 80px; }
+  /* Notifications are live elements so they can arrive one after another, like they do during the day. */
+  .notes { position: absolute; left: 4.5%; right: 4.5%; top: 47%; }
+  .note {
+    position: absolute; left: 0; right: 0; top: 0; display: flex; gap: 10px; align-items: flex-start; text-align: left;
+    padding: 11px 12px; border-radius: 18px; background: rgb(240 250 247 / 0.86); color: #0A1412;
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    transition: transform 0.6s var(--ease), opacity 0.5s var(--ease);
+  }
+  .note img { width: 30px; height: 30px; border-radius: 8px; flex: none; margin-top: 1px; }
+  .note div { flex: 1; min-width: 0; font-size: 12.5px; line-height: 1.3; }
+  .note b { display: block; font-weight: 650; }
+  .note time { flex: none; font-size: 11px; color: #5E6E6A; }
+
 
   /* ---------------- Steps: sticky phone on the left, the steps scroll past ---------------- */
 
@@ -248,7 +269,7 @@
   @keyframes float { 50% { transform: rotate(2deg) translateY(-12px); } }
   @media (prefers-reduced-motion: reduce) {
     .js .reveal, .js .hero h1 .w { opacity: 1; transform: none; transition: none; }
-    .phone img, .step h3, .step p { transition: none; }
+    .phone > img, .step h3, .step p { transition: none; }
   }
 
   /* ---------------- Phones and small tablets: one column ---------------- */
@@ -256,6 +277,14 @@
   @media (max-width: 860px) {
     .hero { grid-template-columns: 1fr; min-height: 0; gap: 56px; padding-top: 16px; }
     .hero .sub { max-width: none; }
+    /* Side by side the phones get too narrow for the notifications, so the feed tucks in behind the lock screen. */
+    .duo { margin-top: 44px; gap: 0; }
+    .duo .lock { width: min(250px, 64vw); z-index: 1; }
+    .duo .feed { width: min(210px, 52vw); margin: 70px 0 0 -14vw; }
+    .note { padding: 8px 9px; border-radius: 14px; gap: 7px; }
+    .note img { width: 22px; height: 22px; border-radius: 6px; }
+    .note div { font-size: 10.5px; }
+    .note time { font-size: 9.5px; }
     .steps { grid-template-columns: 1fr; gap: 0; }
     .steps .stage { display: none; }
     .step { min-height: 0; padding: 40px 0; max-width: none; }
@@ -289,7 +318,7 @@
   <div class="wrap hero">
     <div>
       <h1 data-de="Bevor du scrollst, sag, wer du sein willst.">Before you scroll, say who you want to be.</h1>
-      <p class="sub" data-de="Emba lässt dich deinen eigenen Glaubenssatz laut sagen, bevor sich Instagram oder TikTok öffnet.">Emba asks you to say your own affirmation out loud before Instagram or TikTok opens.</p>
+      <p class="sub" data-de="Emba zeigt dir jeden Tag deine eigenen Glaubenssätze und lässt dich einen laut sagen, bevor sich Instagram oder TikTok öffnet.">Emba shows you your own beliefs every day and asks you to say one out loud before Instagram or TikTok opens.</p>
       <div class="signup"></div>
     </div>
     <div class="phone" aria-hidden="true">
@@ -297,6 +326,20 @@
       <img class="after" src="/img/en-bingo.webp" data-de-src="/img/de-bingo.webp" alt="">
     </div>
   </div>
+
+  <section class="wrap daily" aria-labelledby="daily">
+    <h2 id="daily" class="reveal" data-de="Deine Glaubenssätze, jeden Tag.">Your beliefs, every day.</h2>
+    <p class="reveal" data-de="Über den Tag erinnert dich Emba an deine eigenen Glaubenssätze. In der App wischst du durch über 300 Affirmationen, jede mit der Bedeutung dahinter.">Throughout the day, Emba reminds you of your own beliefs. In the app, swipe through 300+ affirmations, each with the meaning behind it.</p>
+    <div class="duo">
+      <div class="phone lock" role="img" aria-label="Emba reminders with affirmations on the lock screen" data-de-aria="Erinnerungen von Emba mit Glaubenssätzen auf dem Sperrbildschirm">
+        <img src="/img/en-lock.webp" data-de-src="/img/de-lock.webp" alt="" loading="lazy">
+        <div class="notes"></div>
+      </div>
+      <div class="phone feed">
+        <img src="/img/en-home.webp" data-de-src="/img/de-home.webp" alt="The Emba feed with an affirmation card" data-de-alt="Der Feed in Emba mit einer Affirmationskarte" loading="lazy">
+      </div>
+    </div>
+  </section>
 
   <section class="wrap steps" aria-labelledby="how">
     <div class="stage" aria-hidden="true">
@@ -431,6 +474,7 @@
     });
     document.querySelectorAll(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.set === next)); });
     lightUp();
+    resetNotes();
   }
   document.querySelectorAll(".lang button").forEach(function (b) {
     b.addEventListener("click", function () { if (b.dataset.set !== lang) setLang(b.dataset.set); });
@@ -453,6 +497,48 @@
   var heroPhone = document.querySelector(".hero .phone");
   if (reduce) heroPhone.classList.add("said");
   else setInterval(function () { heroPhone.classList.toggle("said"); }, 2800);
+
+  // ---------------- Every day: reminders keep arriving on the lock screen ----------------
+  var BELIEFS = {
+    en: { title: "Say it to yourself:", times: ["now", "2h ago", "5h ago"],
+          lines: ["I am enough, just as I am.", "My time belongs to me.", "Every day brings me closer to my goal.",
+                  "I'm allowed to take up space.", "I'm learning, and that's enough."] },
+    de: { title: "Sag es dir:", times: ["jetzt", "vor 2 Std.", "vor 5 Std."],
+          lines: ["Ich bin genug, so wie ich bin.", "Meine Zeit gehört mir.", "Jeder Tag bringt mich meinem Ziel näher.",
+                  "Ich darf Raum einnehmen.", "Ich lerne, und das reicht."] }
+  };
+  var notesBox = document.querySelector(".notes"), notes = [], next = 0, ticker = null;
+  function layoutNotes() {
+    var y = 0, times = BELIEFS[lang].times;
+    notes.forEach(function (n, i) {
+      n.style.opacity = i < 3 ? "1" : "0";
+      n.style.transform = "translateY(" + y + "px)" + (i < 3 ? "" : " scale(0.94)");
+      if (i < 3) n.querySelector("time").textContent = times[i];
+      y += n.offsetHeight + 8;
+    });
+    notes.slice(3).forEach(function (n) { setTimeout(function () { n.remove(); }, 600); });
+    notes = notes.slice(0, 3);
+  }
+  function addNote(animate) {
+    var b = BELIEFS[lang], n = document.createElement("div");
+    n.className = "note";
+    n.innerHTML = '<img src="/img/apple-touch-icon.png" alt=""><div><b></b><span></span></div><time></time>';
+    n.querySelector("b").textContent = b.title;
+    n.querySelector("span").textContent = b.lines[next++ % b.lines.length];
+    if (animate) { n.style.opacity = "0"; n.style.transform = "translateY(-16px) scale(0.96)"; n.style.transition = "none"; }
+    notesBox.prepend(n);
+    notes.unshift(n);
+    if (animate) { n.offsetHeight; n.style.transition = ""; }
+    layoutNotes();
+  }
+  function resetNotes() {
+    notesBox.innerHTML = ""; notes = []; next = 0;
+    for (var i = 0; i < 3; i++) addNote(false);
+  }
+  if (!reduce) new IntersectionObserver(function (entries) {
+    clearInterval(ticker);
+    if (entries[0].isIntersecting) ticker = setInterval(function () { addNote(true); }, 3200);
+  }).observe(notesBox);
 
   // ---------------- Steps: the sticky phone follows the step in the middle of the screen ----------------
   var stageImgs = document.querySelectorAll(".steps .stage img");
