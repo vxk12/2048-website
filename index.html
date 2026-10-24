@@ -44,7 +44,8 @@
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  /* clip, not hidden: on iOS anything wider than the screen otherwise widens the page and it opens zoomed in. */
+  html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
   body {
     margin: 0;
     background: var(--ground);
@@ -53,7 +54,7 @@
     font-size: 17px;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   a { color: inherit; }
   img { display: block; max-width: 100%; }
@@ -91,7 +92,7 @@
   /* ---------------- Hero ---------------- */
 
   .hero {
-    display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: center; gap: 48px;
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); align-items: center; gap: 48px;
     min-height: calc(100dvh - 72px); padding: 24px 0 64px;
   }
   .hero h1 {
@@ -364,12 +365,11 @@
     .aura::after { animation: drift 24s ease-in-out infinite alternate-reverse; }
     .orb, .last .big-orb, .vault { animation: breathe 4s ease-in-out infinite; }
     .hero .phone { animation: float 7s ease-in-out infinite; }
-    @media (max-width: 860px) { .hero .phone { animation-name: float-flat; } }
+    @media (max-width: 860px) { .hero .phone { animation: none; } }
   }
   @keyframes drift { to { transform: translate(-8vmax, 6vmax) scale(1.08); } }
   @keyframes breathe { 50% { box-shadow: 0 0 70px rgb(134 227 207 / 0.7), 0 0 18px rgb(102 205 188 / 0.6); } }
   @keyframes float { 50% { transform: rotate(2deg) translateY(-12px); } }
-  @keyframes float-flat { 50% { transform: translateY(-8px); } }
   @media (prefers-reduced-motion: reduce) {
     .js .reveal, .js .hero h1 .w { opacity: 1; transform: none; transition: none; }
     .phone > img, .step h3, .step p { transition: none; }
@@ -379,7 +379,7 @@
 
   @media (max-width: 860px) {
     section { padding: 64px 0; }
-    .hero { grid-template-columns: 1fr; min-height: 0; gap: 44px; padding: 12px 0 24px; }
+    .hero { grid-template-columns: minmax(0, 1fr); min-height: 0; gap: 44px; padding: 12px 0 24px; }
     .hero .sub { max-width: none; margin-bottom: 26px; }
     /* Phones at a size you can take in at a glance, not a whole screen each. */
     .phone { width: min(250px, 66vw); border-radius: 36px; }
@@ -403,7 +403,7 @@
     .vault svg { width: 26px; height: 26px; }
     .tile.private h3, .tile.private p { padding-right: 74px; }
   }
-  @media (max-width: 420px) {
+  @media (max-width: 480px) {
     /* Field and button as two full-width pills instead of one squeezed row. */
     .signup form { flex-direction: column; gap: 10px; padding: 0; background: none; border: 0; border-radius: 0; }
     .signup form:focus-within { box-shadow: none; }
@@ -624,6 +624,10 @@
   function pause(ms, id) {
     return new Promise(function (ok, stop) { setTimeout(function () { id === run ? ok() : stop(); }, ms); });
   }
+  var seen = false;
+  new IntersectionObserver(function (entries) {
+    if (!seen && entries[0].intersectionRatio >= 0.75) { seen = true; listen(); }
+  }, { threshold: 0.75 }).observe(speak);
   function listen() {
     var id = ++run;
     speak.classList.remove("listening", "said");
@@ -631,6 +635,7 @@
       return line.split(" ").map(function (w) { return "<span>" + w + "</span>"; }).join(" ");
     }).join("<br>");
     heardBox.innerHTML = "";
+    if (!seen && !reduce) return;
     if (reduce) { belief.querySelectorAll("span").forEach(function (w) { w.classList.add("lit"); }); speak.classList.add("said"); return; }
     var words = belief.querySelectorAll("span"), i = 0;
     pause(1200, id)
@@ -643,7 +648,7 @@
         return pause(240, id).then(function () { flyUp(heard, target); return pause(160, id); }).then(next);
       })
       .then(function () { speak.classList.add("said"); return pause(2800, id); })
-      .then(function () { speak.classList.remove("said"); return pause(700, id); })
+      .then(function () { speak.classList.remove("said", "listening"); return pause(700, id); })
       .then(listen, function () {});
   }
   // The heard word travels from the box to its place in the belief, then that word lights up.
