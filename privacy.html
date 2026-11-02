@@ -234,7 +234,7 @@
     </nav>
     <section id="de-datenschutz">
       <div class="head"><i>D</i><h2>Datenschutz</h2></div>
-      <p class="lede">Stand: 21. Oktober 2026. Emba braucht kein Konto und hat keinen eigenen Server. Alles, was du in Emba einträgst, bleibt auf deinem iPhone. Über die App sammeln wir keine Daten über dich, nutzen keine Analyse- oder Werbedienste und verfolgen dich nicht.</p>
+      <p class="lede">Stand: 2. November 2026. Emba braucht kein Konto und hat keinen eigenen Server. Deine Glaubenssätze, dein Name und alles, was du in Emba einträgst, bleiben auf deinem iPhone. Damit wir Emba verbessern und Abos abwickeln können, nutzt die App zwei Dienste: PostHog für eine anonyme Nutzungsanalyse und RevenueCat für Emba+. Beide bekommen keine Inhalte von dir und keinen Namen. Wir verfolgen dich nicht über andere Apps oder Websites hinweg und zeigen keine Werbung.</p>
       <div class="blocks">
         <div class="block">
           <h3>Verantwortlich</h3>
@@ -242,17 +242,21 @@
         </div>
         <div class="block">
           <h3>Was nur auf deinem Gerät gespeichert wird</h3>
-          <p>Damit die App funktioniert, speichert Emba auf deinem iPhone: deinen Vornamen, deine gewählten Themen, deine eigenen Glaubenssätze, deine Favoriten, die Anzahl deiner Erinnerungen, die Tage, an denen du die App geöffnet hast (für deine Serie), deine App-Block-Einstellungen und die Zahlen in der Zusammenfassung.</p>
+          <p>Damit die App funktioniert, speichert Emba auf deinem iPhone: deinen Vornamen, deine gewählten Themen, deine eigenen Glaubenssätze, deine Favoriten, deine Einstellungen für Mitteilungen (Anzahl, Zeitplan, Wochentage, Morgen- und Abenderinnerung), deine Widget-Einstellungen, die Tage, an denen du die App geöffnet hast (für deine Streak), deine App-Block-Einstellungen und die Zahlen in der Zusammenfassung.</p>
           <p>Diese Daten werden nicht an uns übertragen. Sie können Teil deines iPhone-Backups werden, wenn du Backups über iCloud oder deinen Computer eingeschaltet hast; dafür gelten die Bedingungen von Apple. Wenn du Emba löschst, werden sie vom Gerät entfernt.</p>
         </div>
         <div class="block">
           <h3>Mikrofon und Spracherkennung</h3>
-          <p>Wenn du deinen Glaubenssatz laut aussprichst, nutzt Emba das Mikrofon und die Spracherkennung von Apple, um zu prüfen, ob du ihn gesagt hast. Kann dein iPhone die Sprache direkt auf dem Gerät erkennen, verlässt die Aufnahme dein iPhone nicht. Andernfalls wird sie zur Erkennung an Apple übertragen; dafür gilt die <a href="https://www.apple.com/legal/privacy/">Datenschutzrichtlinie von Apple</a>.</p>
-          <p>Emba speichert keine Aufnahmen und sendet weder Aufnahmen noch erkannten Text an uns. Den Zugriff kannst du jederzeit in den iPhone-Einstellungen widerrufen und deinen Glaubenssatz stattdessen schreiben.</p>
+          <p>Wenn du deinen Glaubenssatz laut aussprichst, nutzt Emba das Mikrofon und die Spracherkennung von Apple, um zu prüfen, ob du ihn gesagt hast. Emba nutzt dafür bevorzugt Apples Spracherkennung direkt auf dem Gerät; die Aufnahme verlässt dein iPhone dann nicht. Das nötige Sprachmodell lädt dein iPhone einmalig von Apple. Ist das auf deinem Gerät nicht möglich, kann die Aufnahme zur Erkennung an Apple übertragen werden; dafür gilt die <a href="https://www.apple.com/legal/privacy/">Datenschutzrichtlinie von Apple</a>. Damit längere Wörter richtig erkannt werden, gibt Emba der Spracherkennung die Wörter deines Glaubenssatzes als Hinweis.</p>
+          <p>Emba speichert keine Aufnahmen und sendet weder Aufnahmen noch erkannten Text noch deine Glaubenssätze an uns, an PostHog oder an RevenueCat. Den Zugriff kannst du jederzeit in den iPhone-Einstellungen widerrufen und deinen Glaubenssatz stattdessen schreiben.</p>
         </div>
         <div class="block">
           <h3>Mitteilungen</h3>
-          <p>Erinnerungen an deine Glaubenssätze und an das Ende einer Testphase werden lokal auf deinem iPhone geplant. Dafür wird kein Server genutzt.</p>
+          <p>Erinnerungen an deine Glaubenssätze, die Morgen- und Abenderinnerungen mit deiner aktuellen Streak und die Erinnerung an das Ende einer Testphase werden lokal auf deinem iPhone geplant. Dafür wird kein Server genutzt.</p>
+        </div>
+        <div class="block">
+          <h3>Widgets</h3>
+          <p>Fügst du ein Emba-Widget hinzu, teilt die App die Texte dafür über einen geschützten Speicher auf deinem iPhone mit dem Widget (App Group): Affirmationen und Glaubenssätze aus den Quellen, die du gewählt hast, und die Zeiten deiner Glaubenssatz-Mitteilungen. Diese Daten verlassen dein Gerät nicht. Ein Widget auf dem Sperrbildschirm ist auch für andere sichtbar, die dein iPhone sehen.</p>
         </div>
         <div class="block">
           <h3>App-Block, Bildschirmzeit und Kurzbefehle</h3>
@@ -263,8 +267,16 @@
           <p>Sicherst du eine Affirmations-Karte als Bild, fragt Emba nur nach der Erlaubnis, ein Bild zu deinen Fotos hinzuzufügen. Emba kann deine Fotos nicht lesen.</p>
         </div>
         <div class="block">
-          <h3>Käufe, Download und Bewertungen</h3>
-          <p>Emba und Emba+ werden über den App Store von Apple angeboten. Apple wickelt Download und Zahlung als eigener Verantwortlicher ab; wir erhalten keine Zahlungs- oder Kontodaten. Emba prüft auf deinem iPhone über Apple, ob ein Abonnement aktiv ist.</p>
+          <h3>Nutzungsanalyse mit PostHog</h3>
+          <p>Um zu verstehen, welche Teile von Emba genutzt werden und wo es hakt, etwa an welcher Stelle im Onboarding Menschen aufhören, nutzt die App PostHog (PostHog, Inc., USA) als Auftragsverarbeiter. Die Daten liegen in PostHogs Rechenzentrum in der EU (Frankfurt am Main).</p>
+          <p>Übertragen werden: eine zufällige, anonyme Kennung, die Emba bei der Installation erzeugt (ohne Namen oder E-Mail-Adresse); welche Bildschirme du öffnest; welchen Onboarding-Schritt du erreichst und wie lange er gedauert hat; ob du die Paywall gesehen, einen Plan gewählt und gekauft hast; ob ein App-Block-Moment gezeigt wurde, ob du deinen Glaubenssatz gesagt und die App danach geöffnet hast, mit dem Namen dieser App (zum Beispiel „Instagram“); ob du Mitteilungen erlaubt hast; wann die App installiert, aktualisiert, geöffnet oder in den Hintergrund gelegt wurde; sowie App-Version, iOS-Version, Gerätemodell und Sprache. Deine IP-Adresse wird bei der Übertragung verarbeitet.</p>
+          <p>Nicht übertragen werden deine Glaubenssätze, dein Name, Aufnahmen oder sonstige Inhalte. Es gibt keine Bildschirmaufzeichnung und kein Profil über dich. Rechtsgrundlage ist unser berechtigtes Interesse, Emba zu verbessern (Art. 6 Abs. 1 lit. f DSGVO). Du kannst dem jederzeit widersprechen, per E-Mail an <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>. Wir speichern die Daten nur so lange, wie wir sie für die Auswertung brauchen.</p>
+        </div>
+        <div class="block">
+          <h3>Käufe und Emba+ mit RevenueCat</h3>
+          <p>Emba und Emba+ werden über den App Store von Apple angeboten. Apple wickelt Download und Zahlung als eigener Verantwortlicher ab; wir erhalten keine Zahlungs- oder Kontodaten.</p>
+          <p>Um festzustellen, ob Emba+ bei dir aktiv ist, Käufe wiederherzustellen und Angebotscodes einzulösen, nutzt die App RevenueCat (RevenueCat, Inc., 1032 E Brandon Blvd #3003, Brandon, FL 33511, USA) als Auftragsverarbeiter. Übertragen werden eine zufällige, anonyme Kennung, die Kaufdaten, die Apple bereitstellt (Produkt, Kauf- und Verlängerungsdatum, Testphase, Preis, Währung, App-Store-Land), App-Version und iOS-Version; deine IP-Adresse wird bei der Übertragung verarbeitet. Damit wir sehen, wie Paywall und Käufe zusammenhängen, wird die RevenueCat-Kennung mit der anonymen PostHog-Kennung verknüpft, ohne Namen oder E-Mail-Adresse.</p>
+          <p>Rechtsgrundlage ist die Erfüllung deines Abos (Art. 6 Abs. 1 lit. b DSGVO). Für die Übermittlung in die USA gelten die Standardvertragsklauseln der EU-Kommission.</p>
           <p>Von Apple erhalten wir zusammengefasste Verkaufs- und Downloadzahlen sowie Absturzberichte nur von Menschen, die „Mit App-Entwicklern teilen“ eingeschaltet haben; diese Daten lassen keine Rückschlüsse auf einzelne Personen zu. Bittet dich Emba um eine Bewertung, öffnet sich Apples eigene Bewertungsfunktion.</p>
         </div>
         <div class="block">
@@ -278,7 +290,7 @@
         </div>
         <div class="block">
           <h3>Deine Rechte</h3>
-          <p>Nach der DSGVO hast du das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Da wir keine personenbezogenen Daten aus der App speichern, kannst du deine Daten jederzeit selbst in der App ändern oder durch Löschen der App entfernen. Bei Fragen schreib an <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>.</p>
+          <p>Nach der DSGVO hast du das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Die Daten bei PostHog und RevenueCat hängen nur an einer zufälligen Kennung, nicht an deinem Namen; möchtest du Auskunft, Löschung oder widersprechen, schreib an <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>. Alles, was nur auf deinem Gerät liegt, kannst du in der App ändern oder durch Löschen der App entfernen; eine neue Installation erzeugt neue Kennungen.</p>
           <p>Emba richtet sich nicht an Kinder unter 16 Jahren. Ändert sich die App, passen wir diese Erklärung an; es gilt die hier veröffentlichte Fassung.</p>
         </div>
       </div>
@@ -295,7 +307,7 @@
     </nav>
     <section id="en-privacy">
       <div class="head"><i>P</i><h2>Privacy Policy</h2></div>
-      <p class="lede">Last updated: October 21, 2026. Emba doesn't need an account and has no server of its own. Everything you enter in Emba stays on your iPhone. Through the app we don't collect any data about you, don't use analytics or advertising services, and don't track you.</p>
+      <p class="lede">Last updated: November 2, 2026. Emba doesn't need an account and has no server of its own. Your beliefs, your name and everything you enter in Emba stay on your iPhone. To improve Emba and handle subscriptions, the app uses two services: PostHog for anonymous usage analytics and RevenueCat for Emba+. Neither receives your content or your name. We don't track you across other apps or websites and don't show ads.</p>
       <div class="blocks">
         <div class="block">
           <h3>Who is responsible</h3>
@@ -303,17 +315,21 @@
         </div>
         <div class="block">
           <h3>What is stored only on your device</h3>
-          <p>To work, Emba stores on your iPhone: your first name, the themes you chose, your own beliefs, your favorites, the number of reminders, the days you opened the app (for your streak), your App Block settings and the numbers in the summary.</p>
+          <p>To work, Emba stores on your iPhone: your first name, the themes you chose, your own beliefs, your favorites, your notification settings (number, schedule, days, morning and evening reminders), your widget settings, the days you opened the app (for your streak), your App Block settings and the numbers in the summary.</p>
           <p>This data is not sent to us. It may become part of your iPhone backup if you have backups to iCloud or your computer turned on; Apple's terms apply to those. When you delete Emba, it is removed from the device.</p>
         </div>
         <div class="block">
           <h3>Microphone and speech recognition</h3>
-          <p>When you say your belief out loud, Emba uses the microphone and Apple's speech recognition to check that you said it. If your iPhone can recognize the language on the device, the recording never leaves your iPhone. Otherwise it is sent to Apple for recognition; <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a> applies.</p>
-          <p>Emba doesn't store recordings and doesn't send recordings or recognized text to us. You can revoke access at any time in your iPhone settings and type your belief instead.</p>
+          <p>When you say your belief out loud, Emba uses the microphone and Apple's speech recognition to check that you said it. Emba prefers Apple's on-device speech recognition, so the recording never leaves your iPhone; your iPhone downloads the language model from Apple once. If that isn't possible on your device, the recording may be sent to Apple for recognition; <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a> applies. To recognize longer words correctly, Emba gives the speech recognition the words of your belief as hints.</p>
+          <p>Emba doesn't store recordings and doesn't send recordings, recognized text or your beliefs to us, to PostHog or to RevenueCat. You can revoke access at any time in your iPhone settings and type your belief instead.</p>
         </div>
         <div class="block">
           <h3>Notifications</h3>
-          <p>Reminders of your beliefs and of the end of a free trial are scheduled locally on your iPhone. No server is involved.</p>
+          <p>Reminders of your beliefs, the morning and evening reminders with your current streak, and the reminder that a free trial is ending are scheduled locally on your iPhone. No server is involved.</p>
+        </div>
+        <div class="block">
+          <h3>Widgets</h3>
+          <p>If you add an Emba widget, the app shares its texts with the widget through protected storage on your iPhone (an App Group): affirmations and beliefs from the sources you chose and the times of your belief notifications. This data never leaves your device. A Lock Screen widget is visible to anyone who can see your iPhone.</p>
         </div>
         <div class="block">
           <h3>App Block, Screen Time and Shortcuts</h3>
@@ -324,8 +340,16 @@
           <p>When you save an affirmation card as an image, Emba only asks for permission to add an image to your photos. Emba can't read your photos.</p>
         </div>
         <div class="block">
-          <h3>Purchases, downloads and ratings</h3>
-          <p>Emba and Emba+ are offered through Apple's App Store. Apple handles downloads and payment as an independent controller; we don't receive any payment or account details. On your iPhone, Emba checks with Apple whether a subscription is active.</p>
+          <h3>Usage analytics with PostHog</h3>
+          <p>To understand which parts of Emba are used and where people get stuck, for example where in onboarding they stop, the app uses PostHog (PostHog, Inc., USA) as our processor. The data is stored in PostHog's EU data center (Frankfurt, Germany).</p>
+          <p>What is sent: a random, anonymous identifier that Emba creates when it is installed (no name or email address); which screens you open; which onboarding step you reach and how long it took; whether you saw the paywall, chose a plan and bought; whether an App Block moment was shown, whether you said your belief and opened the app afterwards, including that app's name (for example "Instagram"); whether you allowed notifications; when the app was installed, updated, opened or sent to the background; and app version, iOS version, device model and language. Your IP address is processed during the transfer.</p>
+          <p>Your beliefs, your name, recordings and any other content are not sent. There is no screen recording and no profile about you. The legal basis is our legitimate interest in improving Emba (Art. 6(1)(f) GDPR). You can object at any time by emailing <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>. We keep the data only as long as we need it for the analysis.</p>
+        </div>
+        <div class="block">
+          <h3>Purchases and Emba+ with RevenueCat</h3>
+          <p>Emba and Emba+ are offered through Apple's App Store. Apple handles downloads and payment as an independent controller; we don't receive any payment or account details.</p>
+          <p>To determine whether Emba+ is active for you, restore purchases and redeem offer codes, the app uses RevenueCat (RevenueCat, Inc., 1032 E Brandon Blvd #3003, Brandon, FL 33511, USA) as our processor. What is sent: a random, anonymous identifier, the purchase data Apple provides (product, purchase and renewal date, trial, price, currency, App Store country), app version and iOS version; your IP address is processed during the transfer. So that we can see how the paywall and purchases relate, the RevenueCat identifier is linked to the anonymous PostHog identifier, without a name or email address.</p>
+          <p>The legal basis is providing your subscription (Art. 6(1)(b) GDPR). Transfers to the USA are covered by the European Commission's Standard Contractual Clauses.</p>
           <p>From Apple we receive aggregated sales and download figures, and crash reports only from people who turned on "Share With App Developers"; this data doesn't identify anyone. If Emba asks you for a rating, Apple's own rating prompt opens.</p>
         </div>
         <div class="block">
@@ -339,7 +363,7 @@
         </div>
         <div class="block">
           <h3>Your rights</h3>
-          <p>Under the GDPR you have the right of access, rectification, erasure, restriction of processing, data portability and objection, as well as the right to lodge a complaint with a data protection authority. Since we don't store any personal data from the app, you can change your data in the app at any time or remove it by deleting the app. If you have questions, write to <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>.</p>
+          <p>Under the GDPR you have the right of access, rectification, erasure, restriction of processing, data portability and objection, as well as the right to lodge a complaint with a data protection authority. The data at PostHog and RevenueCat is tied only to a random identifier, not to your name; for access, erasure or to object, write to <a href="mailto:rttg.dev@gmail.com">rttg.dev@gmail.com</a>. Anything stored only on your device you can change in the app or remove by deleting the app; a new installation creates new identifiers.</p>
           <p>Emba is not directed at children under 16. If the app changes, we will update this policy; the version published here applies.</p>
         </div>
       </div>
