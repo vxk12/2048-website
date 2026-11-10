@@ -140,7 +140,12 @@
   /* While the demo is speaking, sound waves rise into the phone from below, as if you were talking into it. */
   .talk { position: relative; --pw: min(310px, 80vw); }
   .talk .phone { width: var(--pw); }
-  .waves { position: absolute; left: 50%; top: 100%; width: 96px; height: 56px; margin: 18px 0 0 -48px; pointer-events: none; }
+  .waves {
+    position: absolute; left: 50%; top: 100%; width: 96px; height: 56px; margin: 18px 0 0 -48px; pointer-events: none;
+    opacity: 0; transition: opacity 0.7s var(--ease);
+  }
+  /* The waves keep moving all the time; speaking only fades the whole group in and out, so nothing snaps. */
+  .talk.speaking .waves { opacity: 1; }
   .waves i {
     position: absolute; left: 50%; border: 3.5px solid transparent; border-top-color: var(--teal); border-radius: 50%;
     opacity: 0; filter: drop-shadow(0 0 6px rgb(134 227 207 / 0.6));
@@ -150,9 +155,9 @@
   .waves i:nth-child(2) { width: 60px; height: 60px; margin-left: -30px; top: 20px; }
   .waves i:nth-child(3) { width: 92px; height: 92px; margin-left: -46px; top: 0; }
   /* One after the other, so each wave travels up into the phone. */
-  .talk.speaking .waves i { animation: wave-in 0.9s ease-in-out infinite; }
-  .talk.speaking .waves i:nth-child(2) { animation-delay: 0.15s; }
-  .talk.speaking .waves i:nth-child(3) { animation-delay: 0.3s; }
+  .waves i { animation: wave-in 0.9s ease-in-out infinite; }
+  .waves i:nth-child(2) { animation-delay: 0.15s; }
+  .waves i:nth-child(3) { animation-delay: 0.3s; }
   @keyframes wave-in { 0% { opacity: 0; transform: translateY(8px); } 35% { opacity: 1; } 100% { opacity: 0; transform: translateY(-6px); } }
 
   /* ---------------- Every day: reminders on the lock screen, the feed in the app ---------------- */
@@ -327,6 +332,7 @@
   @media (prefers-reduced-motion: reduce) {
     .js .reveal, .js .hero h1 .w { opacity: 1; transform: none; transition: none; }
     .phone > img, .step h3, .step p { transition: none; }
+    .waves i { animation: none; }
   }
 
   /* ---------------- Phones and small tablets: one column ---------------- */
