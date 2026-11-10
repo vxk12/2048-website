@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Emba: say it before you scroll</title>
-<meta name="description" content="Emba shows you your own beliefs every day and asks you to say one out loud before Instagram or TikTok opens. Join the waitlist.">
+<meta name="description" content="Emba shows you your own beliefs every day and asks you to say one out loud before Instagram or TikTok opens. Free on the App Store for iPhone.">
 <meta name="theme-color" content="#071512">
 <meta property="og:title" content="Emba: say it before you scroll">
-<meta property="og:description" content="Say your own affirmation out loud before Instagram or TikTok opens. Coming soon to the App Store.">
+<meta property="og:description" content="Say your own affirmation out loud before Instagram or TikTok opens. Free on the App Store for iPhone.">
 <meta property="og:image" content="https://www.getemba.app/img/en-bingo.webp">
 <link rel="icon" href="/img/favicon.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
-<link rel="preload" as="image" href="/img/en-speak.webp">
+<meta name="apple-itunes-app" content="app-id=6823711296">
+<link rel="preload" as="image" href="/img/demo-en.jpg">
 <script>
   // Old links from the App Store and the app point at /#en-privacy and the like. The hash never
   // reaches the server, so the forwarding has to happen here, before anything renders.
@@ -106,44 +107,19 @@
   .js .hero h1 .w.lit { opacity: 1; text-shadow: 0 0 28px rgb(134 227 207 / 0.35); }
   .hero .sub { font-size: clamp(1.05rem, 1.6vw, 1.25rem); color: var(--ink-soft); max-width: 34ch; margin: 0 0 32px; }
 
-  /* ---------------- Signup ---------------- */
+  /* ---------------- App Store badge: Apple's own artwork, linked to Emba's page ---------------- */
 
-  .signup { max-width: 470px; }
-  .signup form {
-    display: flex; gap: 6px; padding: 6px; border-radius: 999px;
-    background: rgb(15 38 34 / 0.85); border: 1px solid var(--line);
-    transition: border-color 0.2s, box-shadow 0.3s;
+  /* Drawn after Apple's black badge (Apple's own badge service can't be loaded from here). */
+  .store {
+    display: inline-flex; align-items: center; gap: 10px; height: 58px; padding: 0 22px 0 18px; border-radius: 12px;
+    background: #000; color: #fff; border: 1px solid #A6A6A6; text-decoration: none; transition: transform 0.2s var(--ease);
   }
-  .signup form:focus-within { border-color: var(--accent); box-shadow: 0 0 0 4px rgb(91 194 176 / 0.15); }
-  .signup input {
-    flex: 1; min-width: 0; font: inherit; font-size: 17px; /* below 16px iOS zooms in while typing */
-    color: var(--ink); background: none; border: 0; outline: none; padding: 12px 8px 12px 18px;
-  }
-  .signup input::placeholder { color: var(--ink-faint); }
-  .signup button {
-    flex: none; font: 800 1rem/1 var(--sans); color: var(--accent-ink); background: var(--accent);
-    border: 0; border-radius: 999px; padding: 15px 22px; cursor: pointer; white-space: nowrap;
-    transition: transform 0.15s var(--ease), background 0.2s;
-  }
-  .signup button:hover { background: var(--teal); }
-  .signup button:active { transform: scale(0.97); }
-  .signup button:disabled { opacity: 0.6; cursor: default; transform: none; }
-  .signup button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .signup .fine { margin: 12px 0 0 18px; font-size: 0.8rem; color: var(--ink-faint); }
-  .signup .fine a { color: var(--ink-soft); }
-  .signup .error { margin: 12px 0 0 18px; font-size: 0.9rem; color: #FFB4A8; }
-  .signup .error:empty { display: none; }
-  /* After sending, the field turns into the confirmation, so the change happens where you were looking. */
-  .signup .done {
-    display: none; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 28px;
-    background: var(--raised); border: 1px solid var(--accent);
-  }
-  .signup .done svg { width: 30px; height: 30px; color: var(--teal); flex: none; }
-  .signup .done b { display: block; font-size: 1.02rem; }
-  .signup .done span { color: var(--ink-soft); font-size: 0.92rem; }
-  .signup.sent form, .signup.sent .fine { display: none; }
-  .signup.sent .done { display: flex; animation: pop 0.5s var(--ease); }
-  @keyframes pop { from { opacity: 0; transform: scale(0.96); } }
+  .store svg { width: 30px; height: 30px; margin-top: -3px; }
+  .store span { display: flex; flex-direction: column; font: 600 1.6rem/1 var(--sans); letter-spacing: -0.02em; }
+  .store small { font: 500 0.78rem/1.2 var(--sans); letter-spacing: 0.01em; }
+  .store:hover { transform: translateY(-2px); }
+  .store:active { transform: scale(0.97); }
+  .store:focus-visible { outline: 2px solid var(--teal); outline-offset: 4px; }
 
   /* ---------------- Phone ---------------- */
 
@@ -156,49 +132,11 @@
   .phone > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.7s var(--ease); }
   .hero .phone { transform: rotate(2deg); }
 
-  /* ---------------- Hero phone: Emba listens while you say your belief ----------------
-     The screen is the app's own, with the belief and the button painted out; both are drawn here so they can move.
-     Positions are fractions of the 1320 x 2868 screenshot, sizes in cqw (1% of the phone's width). */
+  /* ---------------- Hero phone: App-Block as the app plays it, recorded from Emba's own demo ----------------
+     The recording has the screen's own rounded corners (60 of 390 x 844 pt), so the phone takes the same shape. */
   .phone { container-type: inline-size; }
-  .speak .after { opacity: 0; }
-  .speak.said .after { opacity: 1; }
-  .speak .belief {
-    position: absolute; left: 3%; right: 3%; top: 55.56%; margin: 0; text-align: center;
-    font-family: var(--serif); font-size: 7.18cqw; line-height: 9.1cqw; color: rgb(240 253 249 / 0.24);
-    transition: opacity 0.6s var(--ease);
-  }
-  .speak .belief span { transition: color 0.35s, text-shadow 0.8s; }
-  .speak .belief span.lit { color: #F0FDF9; text-shadow: 0 0 4cqw rgb(134 227 207 / 0.55); }
-  .speak.said .belief { opacity: 0; }
-  .speak .glow {
-    position: absolute; left: 50%; top: 41.3%; width: 44cqw; aspect-ratio: 1; margin: -22cqw 0 0 -22cqw; border-radius: 50%;
-    background: radial-gradient(circle, rgb(169 238 220 / 0.55), rgb(91 194 176 / 0.28) 42%, transparent 68%);
-    mix-blend-mode: screen; opacity: 0; transition: opacity 0.5s;
-  }
-  .speak.listening .glow { opacity: 1; animation: voice 0.9s ease-in-out infinite; }
-  .speak.said .glow { opacity: 0; }
-  @keyframes voice { 0%, 100% { transform: scale(0.92); } 22% { transform: scale(1.08); } 48% { transform: scale(0.97); } 74% { transform: scale(1.13); } }
-  .speak .bar {
-    position: absolute; left: 5.5%; right: 5.5%; top: 89%; height: 6.1%; display: flex; align-items: center; justify-content: center;
-    gap: 1.6cqw; font: 600 4.3cqw/1 var(--sans); color: #E6F5F1; transition: opacity 0.3s;
-  }
-  .speak .bar svg { width: 4.4cqw; height: 4.4cqw; }
-  .speak.listening .bar, .speak.said .bar { opacity: 0; }
-  /* What the app heard: the box takes over the bottom, matching words fly up into the belief. */
-  .speak .heard {
-    position: absolute; left: 0; right: 0; top: 80%; bottom: 0; display: flex; align-items: flex-end; padding: 0 6% 5.5%;
-    background: linear-gradient(to bottom, rgb(8 16 15 / 0), #08100F 14%, #040C0B);
-    opacity: 0; transform: translateY(3cqw); transition: opacity 0.4s var(--ease), transform 0.5s var(--ease);
-  }
-  .speak.listening .heard { opacity: 1; transform: none; }
-  .speak.said .heard { opacity: 0; }
-  .speak .box {
-    flex: 1; min-height: 19cqw; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 1.2cqw 1.5cqw;
-    padding: 4cqw; border-radius: 6cqw; background: rgb(34 52 49 / 0.7); border: 1px solid rgb(255 255 255 / 0.07);
-    font: 500 4.4cqw/1.2 var(--sans); color: #F0FDF9;
-  }
-  .speak .box:empty::before { content: attr(data-label); color: rgb(134 227 207 / 0.7); }
-  .speak .box span { display: inline-block; transform-origin: 0 0; }
+  .phone.demo { aspect-ratio: 390 / 844; border-radius: 15.4% / 7.1%; }
+  .phone > video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
   /* ---------------- Every day: reminders on the lock screen, the feed in the app ---------------- */
 
@@ -348,7 +286,6 @@
   }
   .last h2 { margin-bottom: 12px; }
   .last > .wrap > p { color: var(--ink-soft); margin: 0 0 32px; }
-  .last .signup { margin-inline: auto; text-align: left; }
 
   footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--ink-faint); font-size: 0.9rem; }
   footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
@@ -404,13 +341,6 @@
     .tile.private h3, .tile.private p { padding-right: 74px; }
   }
   @media (max-width: 480px) {
-    /* Field and button as two full-width pills instead of one squeezed row. */
-    .signup form { flex-direction: column; gap: 10px; padding: 0; background: none; border: 0; border-radius: 0; }
-    .signup form:focus-within { box-shadow: none; }
-    .signup input { padding: 15px 20px; border-radius: 999px; background: rgb(15 38 34 / 0.85); border: 1px solid var(--line); }
-    .signup input:focus { border-color: var(--accent); }
-    .signup button { padding: 17px; }
-    .signup .fine, .signup .error { margin-left: 0; text-align: center; }
     .tile { padding: 26px; }
   }
 </style>
@@ -431,17 +361,13 @@
     <div>
       <h1 data-de="Bevor du scrollst, sag, wer du sein willst.">Before you scroll, say who you want to be.</h1>
       <p class="sub" data-de="Emba zeigt dir jeden Tag deine eigenen Glaubenssätze und lässt dich einen laut sagen, bevor sich Instagram oder TikTok öffnet.">Emba shows you your own beliefs every day and asks you to say one out loud before Instagram or TikTok opens.</p>
-      <div class="signup"></div>
+      <a class="store" href="https://apps.apple.com/app/id6823711296"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span><small data-de="Laden im">Download on the</small>App Store</span></a>
     </div>
-    <div class="phone speak" aria-hidden="true">
-      <img src="/img/en-speak.webp" data-de-src="/img/de-speak.webp" alt="">
-      <div class="glow"></div>
-      <p class="belief"></p>
-      <div class="bar"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Zm40,143.6V240a8,8,0,0,1-16,0V207.6A80.11,80.11,0,0,1,48,128a8,8,0,0,1,16,0,64,64,0,0,0,128,0,8,8,0,0,1,16,0A80.11,80.11,0,0,1,136,207.6Z"/></svg><span data-de="Tippen und sprechen">Tap and speak</span></div>
-      <div class="heard"><div class="box" data-label="Listening …" data-de-label="Ich höre zu …"></div></div>
-      <img class="after" src="/img/en-bingo.webp" data-de-src="/img/de-bingo.webp" alt="">
+    <div class="phone demo" role="img" aria-label="Emba's App Block: Instagram opens only after you say your belief out loud" data-de-aria="Emba's App-Block: Instagram öffnet sich erst, wenn du deinen Glaubenssatz laut sagst">
+      <video src="/img/demo-en.mp4" data-de-src="/img/demo-de.mp4" poster="/img/demo-en.jpg" data-de-poster="/img/demo-de.jpg" autoplay muted loop playsinline preload="auto"></video>
     </div>
   </div>
+
 
   <section class="wrap daily" aria-labelledby="daily">
     <h2 id="daily" class="reveal" data-de="Deine Glaubenssätze, jeden Tag.">Your beliefs, every day.</h2>
@@ -526,9 +452,9 @@
   <section class="last reveal">
     <div class="wrap">
       <div class="big-orb" aria-hidden="true"></div>
-      <h2 data-de="Sei unter den Ersten.">Be one of the first.</h2>
-      <p data-de="Emba kommt bald in den App Store, fürs iPhone.">Emba is coming soon to the App Store, for iPhone.</p>
-      <div class="signup"></div>
+      <h2 data-de="Probier Emba kostenlos.">Try Emba for free.</h2>
+      <p data-de="Im App Store, fürs iPhone.">On the App Store, for iPhone.</p>
+      <a class="store" href="https://apps.apple.com/app/id6823711296"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg><span><small data-de="Laden im">Download on the</small>App Store</span></a>
     </div>
   </section>
 </main>
@@ -545,39 +471,11 @@
   </div>
 </footer>
 
-<template id="signup">
-  <form action="https://assets.mailerlite.com/jsonp/2731535/forms/201965836229936412/subscribe" method="post" novalidate>
-    <label class="sr-only" data-de="E-Mail-Adresse">Email address</label>
-    <input type="email" name="fields[email]" required autocomplete="email" placeholder="you@example.com" data-de-placeholder="du@beispiel.de">
-    <input type="hidden" name="ml-submit" value="1">
-    <input type="hidden" name="anticsrf" value="true">
-    <button type="submit" data-de="Auf die Warteliste">Join the waitlist</button>
-  </form>
-  <p class="error" role="alert"></p>
-  <p class="fine" data-de='Mit Bestätigungsmail. Abmelden jederzeit. <a href="/datenschutz">Datenschutz</a>'>Confirmation email first. Unsubscribe anytime. <a href="/privacy">Privacy</a></p>
-  <div class="done" role="status">
-    <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
-    <div>
-      <b data-de="Fast geschafft.">Almost there.</b>
-      <span data-de="Schau in dein Postfach und bestätige deine E-Mail-Adresse.">Check your inbox and confirm your email address.</span>
-    </div>
-  </div>
-</template>
-
 <script>
 (function () {
   var root = document.documentElement;
   root.classList.add("js");
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // Both signup spots get the same form.
-  var tpl = document.getElementById("signup");
-  document.querySelectorAll(".signup").forEach(function (box, i) {
-    box.appendChild(tpl.content.cloneNode(true));
-    var input = box.querySelector("input[type=email]");
-    input.id = "email-" + i;
-    box.querySelector("label").htmlFor = input.id;
-  });
 
   // ---------------- Language: English by default, German on request ----------------
   var lang = "en";
@@ -588,7 +486,7 @@
       if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
       el.innerHTML = next === "de" ? el.dataset.de : el.dataset.en;
     });
-    [["src", "deSrc"], ["alt", "deAlt"], ["href", "deHref"], ["placeholder", "dePlaceholder"], ["aria-label", "deAria"], ["data-label", "deLabel"]].forEach(function (pair) {
+    [["src", "deSrc"], ["alt", "deAlt"], ["href", "deHref"], ["poster", "dePoster"], ["aria-label", "deAria"], ["data-label", "deLabel"]].forEach(function (pair) {
       document.querySelectorAll("[data-" + pair[1].replace(/[A-Z]/g, function (c) { return "-" + c.toLowerCase(); }) + "]").forEach(function (el) {
         var key = "en" + pair[1].slice(2);
         if (el.dataset[key] === undefined) el.dataset[key] = el.getAttribute(pair[0]);
@@ -599,7 +497,6 @@
     lightUp();
     resetNotes();
     buildDeck();
-    listen();
   }
   document.querySelectorAll(".lang button").forEach(function (b) {
     b.addEventListener("click", function () { if (b.dataset.set !== lang) setLang(b.dataset.set); });
@@ -616,48 +513,6 @@
       if (reduce) { w.classList.add("lit"); return; }
       timers.push(setTimeout(function () { w.classList.add("lit"); }, 350 + i * 190));
     });
-  }
-
-  // ---------------- Hero phone: tap, speak, the words fly up and light, "Great!". Then again. ----------------
-  var BELIEF = { en: ["Every day brings me", "closer to my goal."], de: ["Jeder Tag bringt mich", "meinem Ziel näher."] };
-  var speak = document.querySelector(".speak"), belief = speak.querySelector(".belief"), heardBox = speak.querySelector(".box"), run = 0;
-  function pause(ms, id) {
-    return new Promise(function (ok, stop) { setTimeout(function () { id === run ? ok() : stop(); }, ms); });
-  }
-  var seen = false;
-  new IntersectionObserver(function (entries) {
-    if (!seen && entries[0].intersectionRatio >= 0.75) { seen = true; listen(); }
-  }, { threshold: 0.75 }).observe(speak);
-  function listen() {
-    var id = ++run;
-    speak.classList.remove("listening", "said");
-    belief.innerHTML = BELIEF[lang].map(function (line) {
-      return line.split(" ").map(function (w) { return "<span>" + w + "</span>"; }).join(" ");
-    }).join("<br>");
-    heardBox.innerHTML = "";
-    if (!seen && !reduce) return;
-    if (reduce) { belief.querySelectorAll("span").forEach(function (w) { w.classList.add("lit"); }); speak.classList.add("said"); return; }
-    var words = belief.querySelectorAll("span"), i = 0;
-    pause(1200, id)
-      .then(function () { speak.classList.add("listening"); return pause(800, id); })
-      .then(function next() {
-        if (i === words.length) return pause(600, id);
-        var target = words[i++], heard = document.createElement("span");
-        heard.textContent = target.textContent;
-        heardBox.appendChild(heard);
-        return pause(240, id).then(function () { flyUp(heard, target); return pause(160, id); }).then(next);
-      })
-      .then(function () { speak.classList.add("said"); return pause(2800, id); })
-      .then(function () { speak.classList.remove("said", "listening"); return pause(700, id); })
-      .then(listen, function () {});
-  }
-  // The heard word travels from the box to its place in the belief, then that word lights up.
-  function flyUp(from, to) {
-    var a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
-    from.animate([{ transform: "none" }, { transform: "translate(" + (b.left - a.left) + "px," + (b.top - a.top) + "px) scale(" + b.height / a.height + ")", opacity: 0.4 }],
-                 { duration: 520, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)", fill: "forwards" });
-    // A timer rather than onfinish: it keeps the belief in step with the voice even when frames are skipped.
-    setTimeout(function () { from.style.visibility = "hidden"; to.classList.add("lit"); }, 520);
   }
 
   // ---------------- Feed: five cards to swipe away, they come round again ----------------
@@ -809,31 +664,6 @@
   document.querySelectorAll(".reveal").forEach(function (el) { rise.observe(el); });
 
   // ---------------- Signup: straight to MailerLite, the answer shows up in place ----------------
-  document.querySelectorAll(".signup form").forEach(function (form) {
-    var box = form.parentNode, error = box.querySelector(".error"), button = form.querySelector("button");
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var input = form.querySelector("input[type=email]");
-      if (!input.checkValidity() || !input.value.trim()) {
-        error.textContent = lang === "de" ? "Bitte gib eine gültige E-Mail-Adresse ein." : "Please enter a valid email address.";
-        input.focus();
-        return;
-      }
-      button.disabled = true;
-      error.textContent = "";
-      fetch(form.action, { method: "POST", body: new FormData(form) })
-        .then(function (r) { return r.json(); })
-        .then(function (res) {
-          if (!res.success) throw new Error("rejected");
-          box.classList.add("sent");
-        })
-        .catch(function () {
-          button.disabled = false;
-          error.textContent = lang === "de" ? "Das hat nicht geklappt. Versuch es bitte nochmal." : "That didn't work. Please try again.";
-        });
-    });
-  });
-
   setLang(/^de\b/.test(location.hash.slice(1)) ? "de" : "en");
 })();
 </script>
